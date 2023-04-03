@@ -100,3 +100,6 @@
 ### 面向内核的属性
 1. chromium
    1. content-visibility
+
+
+resize: horizontal;
