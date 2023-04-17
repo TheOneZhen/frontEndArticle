@@ -99,3 +99,20 @@
 6. ToPriimtive是一个抽象操作，对不同数据类型做原始值转化区分
    1. 比如array回先调用.valueOf，如果失败才会调用.toString
 7. 类型与语法第四章，好玩
+8. goto语法（break，continue关键字后端可以携带一个参数标记，然后直接断开）
+   ```js
+      foo: for (var i=0; i<4; i++) {
+         for (var j=0; j<4; j++) {
+            if ((i * j) >= 3) {
+               console.log( "stopping!", i, j );
+               // 跳出被`foo`标记的循环
+               break foo;
+            }
+
+            console.log( i, j );
+         }
+      }
+   ```
+   continue只能跳过循环标签，break可以跳出任意块标签
+   1. 控制台中敲入{a: 10}其实标识的就是标签而不是一个简易**对象**
+   2. JSON-P的出现就是为了解决此类问题，将json数据包进一个函数，避免json直接载入代码变成含标签的代码块
