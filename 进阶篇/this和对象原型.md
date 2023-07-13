@@ -2,11 +2,30 @@
 <!-- 源码全部采用ESNext写，没关系 -->
 ## this
 1. this和作用域的关系
-this是在运行时进行绑定的，作用域是在编译阶段时进行，俩者没有直接关联，不能通过作用域推断this指向。
-2. 当一个函数被调用时，回创建执行上下文，上下文中包含函数调用栈（在哪里被调用），函数的调用方法，传入参数等信息，this也是其中的一个属性。
+
+    this是在运行时进行绑定的，作用域是在编译阶段时构建，俩者没有直接关联，不能通过作用域推断this指向。
+
+2. 当一个函数被调用时，会创建执行上下文，上下文中包含函数调用栈（在哪里被调用），函数的调用方法，传入参数等信息，this也是其中的一个属性。
 
 ### this绑定规则：
-1. 默认绑定：this只和函数被调用的位置有关，全局作用域下会被绑定到全局对象（严格模式下不会绑定到全局对象，而是绑定到`undefined`）
+1. 默认绑定
+    
+    ES6箭头函数的this指向其宿主所在this：
+    ```js
+    // scope: global
+    const obj = {
+      fn: () => this === window
+    }
+    obj.fn() // true
+    ```
+    对于非箭头函数，this只和函数被调用的位置有关，全局作用域下会被绑定到全局对象（严格模式下不会绑定到全局对象，而是绑定到`undefined`）：
+    ```js
+    const obj = {
+      fn: function () { return this === obj }
+    }
+    obj.fn() // true
+    ```
+
 2. 隐式绑定
     ```js
     function fn() {}
@@ -39,7 +58,7 @@ this是在运行时进行绑定的，作用域是在编译阶段时进行，俩�
     }
     ```
     ES6中另一种函数声明方法：**箭头函数**，也能实现硬绑定效果，并常作为回调函数
-1. new绑定
+4. new绑定
     1. new运算符更像是一个语法糖，表示接下来的一个函数会进行**构造函数调用**（区别于普通函数调用）
     2. new一个函数的时候，做了哪些事：
         ```js
@@ -151,7 +170,7 @@ const obj = {
 
 ## 修改函数原型方式
 1. `A.prototype = B.prototype`：建立的是引用，会相互影响
-2. `A.prototype = new B()`：**构造函数调用**存在一些副作用
+2. `A.prototype = new B()`：**构造函数调用**。使用这种方式会调用函数从而造成副作用，比如构造函数内部可能会日志打印、修改数据。
 3. `A.prototype = Object.create(B.prototype)`：可以完美替代，但是会新建一个对象并丢弃
     1. `Object.create`简单实现：
         ```js
@@ -162,7 +181,7 @@ const obj = {
           }
         ```
     2. `Object.create`可以通过描述符设置属性，因为描述符是ES5规范，所以这个方法不能向下兼容
-4. ES6`Object.setPrototypeOf(A.prototype, B.prototype)`
+4. ES6`Object.setPrototypeOf(A.prototype, B.prototype)`：新规范下最优方案
 
 ### 判断对象间委托关系
 1. `[Object A] instanceof [Function B]`：`instanceof`操作符左侧是对象，右侧是函数，可以判断对象A对`[[Prototype]]`链中是否有指向`B.prototype`；
@@ -176,13 +195,119 @@ const obj = {
 2. 但是`Object.__proto__`终究是`Object.prototype`的属性，对于一些特殊对象（比如`Object.create(null)`创建的对象）没有该属性，无法保证其功能的一致性（像`instanceof`一样高不成低不就），同样地，对后续ES6中加入的`Proxy`非常不友好
 3. 修改对象`[[Prototype]]`非常损耗性能，`Object.__proto__`走的是`[[Get]]操作`，不方便性能专项优化
 
-## ES6中`class`
-1. 类的声明不可提升
-2. 
+## [`class`(ES6)](https://developer.mozilla.org/en-US/docs/Glossary/Class)
+
+```js
+A // ReferenceError
+class A {
+  constructor (...args) {
+    this.args = args
+  }
+  static method1 () { ... }
+  method2 () { 
+    console.log(1)
+  }
+}
+```
+
+### 特点
+
+结合上面代码，可以大致得出以下几点：
+
+- `class`的声明不会提升，声明之前调用会抛出`ReferenceError`，表现和`let`、`const`一致；
+- `class A`创建了一个名为`A`的函数，而且这个函数只能通过new调用（构造函数调用）；
+    
+    ```js
+    A instanceof Function // true
+    A() // TypeError
+    const a = new A()
+    ```
+
+- 普通方法（静态方法、构造器不会，会在下面的API中介绍）会被放到类原型中，比如示例代码中的`method2`：
+    
+    ```js
+    A.prototype.method2() // 1
+    A.prototype.method2.propertyIsEnumerable() // false
+    ```
+
+- `class`的表现和构造函数相似，只不过语法方面特殊点，比如方法声明不需要加`function`
+
+### extends
+
+一个语法糖，设置`class`的原型，可以使用`Object.setPrototypeOf`实现：
+```js
+class B extends A {}
+function C () {}
+// 等同于
+Object.setPrototypeOf(C, A)
+
+Object.getPrototypeOf(B) === A // true
+Object.getPrototypeOf(C) === A // true
+```
+
+### super
+
+```js
+class A {
+  constructor () {
+    console.log('run here A CC')
+  }
+  log () { console.log('run here A log') }
+  do () { return this }
+}
+class B extends A {
+  constructor () {
+    // 构造器中，super指向A.constructor，这里相当于实例化一个A实例
+    const a = super() // run here A CC
+    console.log('a instanceof A: ', a instanceof A) // a instanceof A: true
+  }
+  log () {
+    // 方法中super指向A对象
+    super.log() // run here A log
+    console.log('run here B log')
+  }
+}
+```
+
+> `class super`很难兼容ES6之前的规范，除了上述原因（`super`在不同类型方法中表现不同），如果调用`super`的方法`this`被修改，可能会导致未知错误。
+
+### new.target
+
+当函数被构造调用时，`new.target`才有效：
+```js
+class A {
+  constructor () {
+    console.log('run here A: ', new.target.name)
+  }
+}
+class B extends A {
+  constructor () {
+    super() // run here A: B
+    console.log('run here B: ', new.target.name) // run here B: B
+  }
+  log () {
+    // 非构造函数，new.target无效
+    console.log('new.target is invaild: ', new.target) // new.target is invaild: undefined
+  }
+}
+```
+
+### static
+
+作用是将一个属性直接添加到类上（普通方法是添加到`[[prototype]]`上）：
+```js
+class A {
+  static fn1 () { console.log('run here fn1') }
+  fn2 () {}
+}
+Object.getOwnPropertyNames(A) // ['length', 'name', 'prototype', 'fn1']
+A.fn1() // run here fn1
+```
 
 ## `Object.prototype`与`Object.__proto__`（存疑）
 俩者本质没有区别，但是prototype是ES标准，__proto__是浏览器厂商的杰作
 > ES6将__proto__纳入规范
+> prototype只有函数有
 可以通过obj.__proto__去修改对象的原型链，但是会存在很多问题
 1. 原型的修改开销极大，因为需要修改所有继承来自该[[Prototype]]的对象
 2. 会导致原型链的污染

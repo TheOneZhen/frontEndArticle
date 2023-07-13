@@ -66,3 +66,46 @@ https://juejin.cn/post/7210614375290863673
       1. a series knowledge of browser internal architecture that is separed four partition and this is first part
       2. it include many cartoon images funny and detail
    16. 事件中执行的函数和普通函数有什么区别，比如a标签中会阻碍href的跳转等，以及为什么非空返回值会导致内存泄漏？
+
+
+## 面试知识点综合
+1. 《你不知道的JS》
+    1. 差不多2/3的进度，但是个人记录质量不是很高
+2. vue设计与原理
+    1. 进度几乎为0
+    2. 没有时间等待这本书完全学完了，一周要求全部阅读完全并形成博客，下周必须开始简历投递
+3. 手撕源码
+    1. Promise
+        1. #.all #.race
+    2. 函数柯里化
+    3. call\bind\apply
+4. vue-router原理
+    1. window相关
+5. 工程化相关
+    1. vite
+    2. webpack
+    3. 微前端（iframe、microapp）
+6. 状态管理工具
+7. 计算机网络
+    1. http、https、ssl、websocket等协议
+    2. tcp/ip
+    3. udp
+8. 宿主环境（ECMA中成为agent）
+    1. webworker
+    2. nodejs
+9. 算法相关
+
+
+## 文章目录结构设计
+
+- 标题(`#`)、列表(`1.`)、块(`>`)、文本结束后需要隔一行
+- tab是四个空格
+- 对于标题
+    - 范围`# - ###`再多网页和vscode表现不明显
+    - 文章标题、标签、描述使用`#`，这个是对markdown特殊解析使用的
+- 内容
+    - 背景区块：正常文本介绍，引出以下内容
+        - 特点、特征
+        - ...特殊API介绍
+            - 场景分析（介绍） + 源码（polyfill）
+        - 其他
