@@ -19,3 +19,5 @@ jobs:
           scp: |
             './*/*.md' => /var/www/server/static/articles
             'tag.json' => /var/www/server/static/articles
+          last_ssh: |
+            source /var/www/server/uploadArticles.sh
