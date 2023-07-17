@@ -2,7 +2,7 @@ name: spread
 on:
   push:
     tags:
-      - zhenisbusy
+      - zhenisbusy.**
 jobs:
   build:
     runs-on: ubuntu-20.04
