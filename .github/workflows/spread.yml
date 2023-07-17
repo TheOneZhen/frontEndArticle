@@ -1,6 +1,8 @@
 name: spread
 on:
   push:
+    branchs:
+      - master
     paths:
       - './**/**.md'
       - 'tag.json'
