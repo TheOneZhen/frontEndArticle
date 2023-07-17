@@ -1,8 +1,9 @@
 name: spread
 on:
   push:
-    tags:
-      - zhenisbusy.**
+    paths:
+      - './**/**.md'
+      - 'tag.json'
 jobs:
   build:
     runs-on: ubuntu-20.04
