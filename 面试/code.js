@@ -178,3 +178,14 @@ function flatten (arr, level = 1) {
   }
   return result
 }
+
+
+(async function () {
+  const sleep = (wait) => new Promise(resolve => {
+    setTimeout(() => {
+      console.log(10)
+    }, wait);
+    setTimeout(() => resolve(1), 0)
+  })
+  await sleep(1000)
+})()
