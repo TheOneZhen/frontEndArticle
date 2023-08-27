@@ -1,25 +1,25 @@
-name: spread
-on:
-  push:
-    branchs:
-      - master
-    paths:
-      - '**.md'
-      - 'tag.json'
-jobs:
-  build:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
-      - name: start
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
-        with:
-          host: ${{ secrets.HOST_SERVER }}
-          user: ${{ secrets.USERNAME_SERVER }}
-          pass: ${{ secrets.PASSWORD_SERVER }}
-          connect_timeout: 10s
-          scp: |
-            './*/*.md' => /var/www/server/static/articles
-            'tag.json' => /var/www/server/static/articles
-          last_ssh: |
-            source /var/www/server/deployed/uploadArticles.sh
+# name: spread
+# on:
+#   push:
+#     branchs:
+#       - master
+#     paths:
+#       - '**.md'
+#       - 'tag.json'
+# jobs:
+#   build:
+#     runs-on: ubuntu-20.04
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: start
+#         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+#         with:
+#           host: ${{ secrets.HOST_SERVER }}
+#           user: ${{ secrets.USERNAME_SERVER }}
+#           pass: ${{ secrets.PASSWORD_SERVER }}
+#           connect_timeout: 10s
+#           scp: |
+#             './*/*.md' => /var/www/server/static/articles
+#             'tag.json' => /var/www/server/static/articles
+#           last_ssh: |
+#             source /var/www/server/deployed/uploadArticles.sh

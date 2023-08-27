@@ -1,13 +1,28 @@
 # 响应系统的作用与实现
-
+<!-- 这里整一张结构图 -->
 ```ts
+// 存储响应式数据各个key存在联系的副作用函数
 type Bucket = WeakMap<any, Map<string, Set<Function>>>
 const bucket: Bucket = new WeakMap()
+// 当前激活的副作用函数
+let activeEffect
 ```
 
-## track
+## effect：副作用函数
 
-
+```js
+function effect (fn, options = {}) {
+  activeEffect = () => {
+    fn.deps.forEach(dep => dep.delete(fn))
+    fn()
+  }
+  activeEffect.options = options
+  activeEffect.deps = []
+  activeEffect()
+  activeEffect = null
+}
+```
+## track：
 
 ```js
 function track (target, key) {
@@ -21,6 +36,7 @@ function track (target, key) {
       depsMap.set(key, (deps = new Set()))
     }
     deps.add(activeEffect)
+    // activeEffect.deps保存当前effect函数存在联系的依赖
     activeEffect.deps.push(deps)
     activeEffect.options.onTrack && activeEffect.options.onTrack({
       effect: activeEffect,
@@ -31,7 +47,7 @@ function track (target, key) {
 }
 ```
 
-## trigger
+## trigger：触发函数
 
 ```js
 function trigger(target, key, newValue, oldValue) {
@@ -54,6 +70,28 @@ function trigger(target, key, newValue, oldValue) {
   })
 }
 ```
+
+## 调度执行
+> Vue3有更完整的调度算法，建议查看源码
+
+```js
+const queue = new Set()
+const p = Promise.resolve()
+let isFlushing = false
+function flush () {
+  if (isFlushing) return
+  isFlushing = true
+  p.then(() => queue.forEach(fn => fn()))
+    .finally(() => isFlushing = false)
+}
+```
+
+## watch
+### 读取操作封装（traverse）
+### options.immediate
+### options.flush
+### 副作用过期
+### onCleanup
 
 <!-- 这里的总结需要不断补充 -->
 响应式数据`data`改变会触发副作用函数`effect`，`effect`是一些功能的封装，用来更新视图或者更新其他响应式数据等。在触发`effect`之前，需要进行`data`与`effect`关系建立，即`track`；关系建立后触发`effect`称为`trigger`。响应系统设计主要任务就是解决它们之间边界问题。
@@ -116,37 +154,6 @@ for (const key in obj) {} // ownKeys
 
 
 # 原始值的响应式方案
-
-
-
-# 响应系统的作用与实现
-
-## effect：副作用函数
-
-响应式数据变更会使引用该数据的内容变更，后这就是副作用函数。
-
-## 调度执行
-> Vue3有更完整的调度算法，建议查看源码
-
-```js
-const queue = new Set()
-const p = Promise.resolve()
-let isFlushing = false
-function flush () {
-  if (isFlushing) return
-  isFlushing = true
-  p.then(() => queue.forEach(fn => fn()))
-    .finally(() => isFlushing = false)
-}
-```
-
-## watch
-### 读取操作封装（traverse）
-### options.immediate
-### options.flush
-### 副作用过期
-### onCleanup
-
 
 # Q&A
 
