@@ -11,6 +11,21 @@
 
 // console.log(p.a) // 1
 
+function process () {
+  Promise.resolve().then(function () {
+    console.log(1)
+  })
+  setTimeout(function () {
+    console.log(2)
+  })
+  new Promise(resolve => setTimeout(() => resolve(3)))
+    .then(function (res) {
+      console.log(res)
+    })
+}
+
+process()
+
 const TemplateStr = `
 <template>
   <div>

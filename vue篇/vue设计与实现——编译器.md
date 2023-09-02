@@ -1,8 +1,7 @@
-Vue编译器的作用是将模板编译成渲染函数
+# 编译器概览
 
-# 编译器核心
+编译器的作用是将模板（template）编译成渲染函数（render）
 
-之后以此模板字符串为基础进行解析：
 ```js
 const TemplateStr = `
 <template>
