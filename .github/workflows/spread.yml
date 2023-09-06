@@ -13,19 +13,20 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: build
+        run: npm run build
       - name: get-diff
-        run: |
-          echo "DIFF=$(git diff ${{ github.event.before }} ${{ github.event.after }} --name-status)" >> $GITHUB_ENV
-          echo ${{ env.DIFF }}
-      # - name: start
-      #   uses: cross-the-world/ssh-scp-ssh-pipelines@latest
-      #   with:
-      #     host: ${{ secrets.HOST_SERVER }}
-      #     user: ${{ secrets.USERNAME_SERVER }}
-      #     pass: ${{ secrets.PASSWORD_SERVER }}
-      #     connect_timeout: 10s
-      #     scp: |
-      #       './*/*.md' => /var/www/server/static/articles
-      #       'tag.json' => /var/www/server/static/articles
-      #     last_ssh: |
-      #       source /var/www/server/deployed/uploadArticles.sh
+        run: node genDiff.js ${{ github.event.before }} ${{ github.event.after }}
+      - name: deploy
+        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+        with:
+          host: ${{ secrets.HOST_SERVER }}
+          user: ${{ secrets.USERNAME_SERVER }}
+          pass: ${{ secrets.PASSWORD_SERVER }}
+          connect_timeout: 10s
+          scp: |
+            "./static" => /var/www/
+            'tag.json' => /var/www/server/
+            'diff.json' => /var/www/server/
+          # last_ssh: |
+          #   source /var/www/server/deployed/uploadArticles.sh

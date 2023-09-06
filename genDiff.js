@@ -4,7 +4,7 @@ const path = require('path')
 
 function main () {
   const diff = { A: {}, M: {}, D: [] }
-  execSync('git diff origin/master --name-status')
+  execSync(`git diff ${process.env[0]} ${process.env[1]} --name-status`)
     .toString()
     .split(/\n/)
     .filter(Boolean)
@@ -30,12 +30,6 @@ function main () {
       }
     })
   writeFileSync('./diff.json', JSON.stringify(diff))
-  execSync('git add diff.json')
-  const statusStr = execSync('git status').toString()
-  if (/diff.json/.test(statusStr)) {
-    execSync('git commit diff.json -m "Article数据自动生成"')
-    execSync('git push')
-  }
 }
 
 function parseArticle (text) {

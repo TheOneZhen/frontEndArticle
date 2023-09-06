@@ -3,11 +3,19 @@ const process = require('process');
 
 module.exports = (env) => {
   return {
-    entry: './main.js',
     output: {
-      filename: 'main.js',
-      path: path.resolve(__dirname, 'dist'),
-      clean: true
+      path: path.resolve(__dirname, 'static')
+    },
+    module: {
+      rules: [
+        {
+          test: "/\.(png|svg|jpg|jpeg)/i",
+          type: 'asset',
+          generator: {
+            publicPath: 'static/',
+          }
+        }
+      ]
     }
   }
 };
