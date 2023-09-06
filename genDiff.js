@@ -4,7 +4,7 @@ const path = require('path')
 
 function main () {
   const diff = { A: {}, M: {}, D: [] }
-  execSync(`git diff ${process.env[0]} ${process.env[1]} --name-status`)
+  execSync(`git diff ${process.argv[2]} ${process.argv[3]} --name-status`)
     .toString()
     .split(/\n/)
     .filter(Boolean)
