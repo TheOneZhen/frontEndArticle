@@ -30,7 +30,8 @@ function main () {
       }
     })
   writeFileSync('./diff.json', JSON.stringify(diff))
-  execSync('git add diff.json | git commit diff.json -m "Article数据自动生成"')
+  execSync('git add diff.json')
+  execSync('git commit diff.json -m "Article数据自动生成"')
 }
 
 function parseArticle (text) {
