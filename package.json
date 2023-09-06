@@ -5,7 +5,7 @@
   "scripts": {
     "build": "",
     "prepare": "husky install",
-    "generate-diff": "node genDiff.js"
+    "diff": "node genDiff.js"
   },
   "dependencies": {
     "lodash": "^4.17.21"
