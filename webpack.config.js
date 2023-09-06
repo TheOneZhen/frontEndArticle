@@ -3,6 +3,7 @@ const process = require('process');
 
 module.exports = (env) => {
   return {
+    entry: './main.js',
     output: {
       path: path.resolve(__dirname, 'static')
     },
