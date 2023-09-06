@@ -5,13 +5,12 @@
   "scripts": {
     "build": "",
     "prepare": "husky install",
-    "uninstall-husky": "npm uninstall husky && git config --unset core.hooksPath"
+    "generate-diff": "node genDiff.js"
   },
   "dependencies": {
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "husky": "^8.0.3",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
   }
