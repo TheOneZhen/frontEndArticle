@@ -12,7 +12,7 @@ jobs:
           fetch-depth: 0
       - name: get-diff
         run: |
-          echo "DIFF=${git diff ${{ github.event.before }} ${{ github.event.after }} --name-status}" >> $GITHUB_ENV
+          echo "DIFF=$(git diff ${{ github.event.before }} ${{ github.event.after }} --name-status)" >> $GITHUB_ENV
           | echo ${{ env.DIFF }}
       # - name: start
       #   uses: cross-the-world/ssh-scp-ssh-pipelines@latest
