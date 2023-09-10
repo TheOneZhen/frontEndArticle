@@ -4,6 +4,7 @@ const path = require('path')
 
 function main () {
   const diff = { A: {}, M: {}, D: [] }
+  execSync('git config --global core.quotepath false')
   execSync(`git diff ${process.argv[2]} ${process.argv[3]} --name-status`)
     .toString()
     .split(/\n/)
