@@ -35,7 +35,7 @@ function main () {
 
 function parseArticle (text) {
   const result = { title: "", content: text }
-  let info = text.match(/^```\s*zhenisbusy(.*)```$/)
+  let info = text.match(/^```\s*zhenisbusy([\s\S]+?)```$/m)
   if (info && info[1]) {
     result.content = text.replace(info[0], '').trimStart()
     try {
