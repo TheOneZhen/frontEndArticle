@@ -37,23 +37,16 @@
 5. Web Worker
 6. WebAssembly
 7. 打包过程中chunk的作用
-8. AMD、CommonJS、UMD、ESM
-9.  对vite构建的理解
+8.  对vite构建的理解
     1. vite使用EsBuild预构建源码
     2. 索引Module依赖
     3. 将CommonJS 或 UMD 转换为ESM
-10. ESM
-    1. 具名导入优点：有效支持TreeShaking
-    2. 动态导入
-        1. import写在顶部与动态导入的区别
-11. URL构造器
+9.  URL构造器
     1. url变基
-12. 工程化
-    1. 多页面使用相同组件，如何打包
-13. https://developer.chrome.com/blog/inside-browser-part1/
+10. https://developer.chrome.com/blog/inside-browser-part1/
     1. a series knowledge of browser internal architecture that is separed four partition and this is first part
     2. it include many cartoon images funny and detail
-14. 事件中执行的函数和普通函数有什么区别，比如a标签中会阻碍href的跳转等，以及为什么非空返回值会导致内存泄漏？
+11. 事件中执行的函数和普通函数有什么区别，比如a标签中会阻碍href的跳转等，以及为什么非空返回值会导致内存泄漏？
 
 # list
 
@@ -74,7 +67,6 @@
     - 降低优先级，应该优先篇阅读以备面试所需
 
 
-今日大致内容：工程化实践，然后再根据已有知识点补充简历，根据简历筛选薄弱知识点，进行补充。
 - vite插件
 - webpack loader
     - 文章工程化打包
@@ -84,3 +76,11 @@
 > !!!!!!!!!!!!!基础面试题的目的不是为了一问一答，而是枚举问题，以及在问题之间产生关联
 
 
+- 2023/9/9
+    - 处理文章中对自己资源的引用
+    - static.存在的问题
+    - 后台数据插入
+    - 表结构问题（
+
+
+思考：如何对一个算法进行测试，或者说有效的产生测试用例。
