@@ -28,5 +28,5 @@ jobs:
             "./static" => /var/www/
             'tag.json' => /var/www/server/
             'diff.json' => /var/www/server/
-          # last_ssh: |
-          #   source /var/www/server/deployed/uploadArticles.sh
+          last_ssh: |
+            source /var/www/server/deployed/updateArticle.sh
