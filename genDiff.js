@@ -43,7 +43,7 @@ function parseArticle (text) {
     } catch {
       return void 0
     }
-  }
+  } else if (!info) return undefined
   return result
 }
 
