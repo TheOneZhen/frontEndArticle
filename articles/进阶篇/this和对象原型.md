@@ -462,6 +462,9 @@ function getName() { console.log(5) }
 		这些函数执行过程中到底对this及其相关做了什么
 			预计原型链相关
 
+# Q&A
+
+- const定义的变量可以被修改吗，如何保证完全不可修改？
 
 ## reference
 1. https://segmentfault.com/a/1190000018270750
