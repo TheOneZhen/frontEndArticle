@@ -36,11 +36,6 @@
 4. postCss
 5. Web Worker
 6. WebAssembly
-7. 打包过程中chunk的作用
-8.  对vite构建的理解
-    1. vite使用EsBuild预构建源码
-    2. 索引Module依赖
-    3. 将CommonJS 或 UMD 转换为ESM
 9.  URL构造器
     1. url变基
 10. https://developer.chrome.com/blog/inside-browser-part1/
@@ -73,15 +68,13 @@
 
 # 面试内容参解
 
-1. 项目复盘
-2. 八股文
-3. 工程化实践：vite插件、loader；webpack插件、loader；Jest；Vue插件；TS
+1. 项目复盘（基本内容整理完毕，开始每日复读）
+2. 八股文（基本内容整理完毕，开始每日复读）
+3. 工程化实践 + 网站优化：vite插件、loader；webpack插件、loader；Jest；Vue插件；TS；微前端
 4. Electron
 5. Nodejs + Nestjs
 6. Python + Django
-7. 网站优化（或者把上面的实践放到网站中）
-8. 设计模式
-9. V8
+7.  V8
     1. 垃圾回收机制
     2. 缓存更新策略
 
@@ -99,14 +92,12 @@
 # 梦幻装备
 
 - 神木
-    - 雨师套
     - 高魔衣服
 - 化生
-    - 雨师套
     - 高魔衣服
-    - 武器
 - 龙宫
     - 高速鞋
 - 大唐
     - 不磨武器
-    - 横扫套
+- 缺宝石
+- 善恶套
