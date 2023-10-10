@@ -60,7 +60,7 @@ webpack --env goal=local --env production
 
 # [Vue-CLI][Vue-CLI]
 
-Vue-CLI是一个脚手架，用来快速初始化Vue项目，是Webpack的sugar。Vue2时官方还是推荐使用Vue-CLI初始化项目，Vue3之后推荐使用`Vite create-vue`来初始化项目，不过不阻止我们使用它。
+Vue-CLI是一个脚手架，用来快速初始化Vue项目，是Webpack的sugar。Vue2时官方还是推荐使用Vue-CLI初始化项目，Vue3之后推荐使用`Vite create-vue`来初始化项目。
 
 - [模式(Modes)](https://cli.vuejs.org/guide/mode-and-env.html#modes)
 
@@ -112,7 +112,7 @@ Vue-CLI是一个脚手架，用来快速初始化Vue项目，是Webpack的sugar�
 
 # [Vite][Vite]
 
-Vite延续了Vue-CLI风格（模式和环境变量），但是取消了固定前缀限制（VUE_APP_*），并新增了静态替换。比如你想在本地开发环境自动登录且不需要license验证，并且添加一个私密ID用于构建环境，可以这里写（注释代表不同文件）：
+Vite延续了Vue-CLI风格（模式和环境变量），但是取消了固定前缀限制（VUE_APP_*），并新增了静态替换。比如你想在本地开发环境自动登录且不需要license验证，并且添加一个私密ID用于构建环境，可以这样写（注释代表不同文件）：
 
 ```js
 // .env
@@ -125,7 +125,7 @@ TOKEN=123456
 
 然后使用指令`vite --mode dev`启动。
 
-- 在HTML环境中，可以使用`%ENV_NAME%`获取环境变量名（能获取import.meta.env下的所有属性）：
+- 在HTML文件中，可以使用`%ENV_NAME%`获取环境变量名（能获取`import.meta.env`下的所有属性）：
 
     ```html
     <!-- 获取模式 -->
@@ -141,7 +141,7 @@ TOKEN=123456
 
     如果没有匹配上，就不会匹配，不会变成`undefined`。
 
-- 在`<script>`和`<template>`中使用`import.meta.env.env_name`获取环境变量名，并且添加了`VITE_`前缀的环境变量会暴露到源码中，不添加则不暴露。在一个Vue文件的`<script>`中这么使用：
+- 在`<script>`和`<template>`中使用`import.meta.env.env_name`获取环境变量名，并且添加了`VITE_`前缀的环境变量会暴露到源码中，不添加则不暴露。在Vue文件的`<script>`中这么使用：
 
     ```js
     <script>
