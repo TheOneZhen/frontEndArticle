@@ -1,5 +1,7 @@
 # Vue3
 
+最近在学习Vue3的源码，参考了霍春阳大神——《Vue.js设计与实现》一书。
+
 ## Vue3相较于Vue2的改变
 
 ### 代码层面
@@ -154,19 +156,3 @@
 		defineComponent在组件中使用时是局部组件，局部组件的渲染受其所在组件影响
 
 
-
-
-Vue2
-	响应式原理
-	生命周期
-	portal
-		源自于react
-		实现方式
-			router-view
-			promise
-			工具
-				portal-vue
-	export
-	component
-		name
-	性能优化

@@ -4,48 +4,48 @@ const PENDING = "PENDING"
 const FULFILLED = "FULFILLED"
 const REJECTED = "REJECTED"
 
-// class Promise {
-//   constructor (execuutor) {
-//     this.status = PENDING
-//     this.value = undefined
-//     this.reason = undefined
+class Promise {
+  constructor (execuutor) {
+    this.status = PENDING
+    this.value = undefined
+    this.reason = undefined
 
-//     this.onResolvedCallbacks = []
-//     this.onRejectedCallback = []
+    this.onResolvedCallbacks = []
+    this.onRejectedCallback = []
 
-//     let resolve = (value) => {
-//       if (this.status === PENDING) {
-//         this.status = FULFILLED
-//         this.value = value
-//         this.onResolvedCallbacks.forEach(fn => fn())
-//       }
-//     }
+    let resolve = (value) => {
+      if (this.status === PENDING) {
+        this.status = FULFILLED
+        this.value = value
+        this.onResolvedCallbacks.forEach(fn => fn())
+      }
+    }
 
-//     let reject = (reason) => {
-//       if (this.status === PENDING) {
-//         this.status = REJECTED
-//         this.reason = reason
-//         this.onRejectedCallback.forEach(fn => fn())
-//       }
-//     }
+    let reject = (reason) => {
+      if (this.status === PENDING) {
+        this.status = REJECTED
+        this.reason = reason
+        this.onRejectedCallback.forEach(fn => fn())
+      }
+    }
 
-//     try {
-//       execuutor(resolve, reject)
-//     } catch (error) {
-//       reject(error)
-//     }
-//   }
+    try {
+      execuutor(resolve, reject)
+    } catch (error) {
+      reject(error)
+    }
+  }
 
-//   then (onFulfilled, onRejected) {
-//     if (this.status === FULFILLED) onFulfilled(this.value)
-//     if (this.status === REJECTED) onRejected(this.reason)
-//     if (this.status === PENDING) {
-//       this.onResolvedCallbacks.push(() => onFulfilled(this.value))
-//       this.onRejectedCallback.push(() => onRejected(this.reason))
-//     }
-//   }
+  then (onFulfilled, onRejected) {
+    if (this.status === FULFILLED) onFulfilled(this.value)
+    if (this.status === REJECTED) onRejected(this.reason)
+    if (this.status === PENDING) {
+      this.onResolvedCallbacks.push(() => onFulfilled(this.value))
+      this.onRejectedCallback.push(() => onRejected(this.reason))
+    }
+  }
 
-// }
+}
 
 /** Promise A+版本 */
 
