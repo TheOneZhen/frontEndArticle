@@ -361,7 +361,7 @@ class A {
 Object.getOwnPropertyNames(A) // ['length', 'name', 'prototype', 'fn1']
 A.fn1() // run here fn1
 ```
- 
+
 # 引用
 
 1. [You-Dont-Know-JS: this & object prototypes](https://github.com/getify/You-Dont-Know-JS/tree/1ed-zh-CN/this%20%26%20object%20prototypes)
