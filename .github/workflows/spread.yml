@@ -29,4 +29,4 @@ jobs:
             'tag.json' => /var/www/server/
             'diff.json' => /var/www/server/
           last_ssh: |
-            source /var/www/server/deployed/uploadArticles.sh
+            /root/anaconda3/envs/python3_10_4/bin/python SPOP.py
