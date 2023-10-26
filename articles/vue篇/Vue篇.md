@@ -1,20 +1,6 @@
-# Vue3
-
-最近在学习Vue3的源码，参考了霍春阳大神——《Vue.js设计与实现》一书。
-
-## Vue3相较于Vue2的改变
-
-### 代码层面
-1. 采用monorepo管理源码，根据功能将不同的模块拆分到packages目录下的不同子目录，使得模块拆分更细化，职责划分更明确，模块之间的依赖关系也更加明确，提高了代码的可维护性。
-2. TypeScript引入，利于IDE对变量类型的推导，在开发阶段避免一些易错问题
-
-### 性能方面
-
 #### 优化源码体积
-1. 移除冷门功能
-2. 引入tree-sharking，减少打包体积（https://segmentfault.com/a/1190000039359421）
 
-3. 数据劫持改变
+1. 数据劫持改变
    Vue2中通过Object.defineProperty劫持数据的getter和setter，
    1. 必须指定拦截的key，所以不能拦截对象中属性的添加和删除（Vue2提供了$set和$delete方法）
    2. 对于深层数据有较大的性能负担
@@ -156,3 +142,110 @@
 		defineComponent在组件中使用时是局部组件，局部组件的渲染受其所在组件影响
 
 
+首先了解大部分API，然后去了解它们的原理，再将原理串联起来。
+
+props
+
+基于数组、对象、类型的声明方式，基于类型的声明方式编译之后会尽可能向基于对象的声明方式对齐。
+
+1. 什么场景下，core需要区分props、attribute、事件，如何区分
+2. props单向数据流原理
+3. 对象形声明type原理是instanceof，所以null不好应该用undefined
+
+v-model
+
+还可以通过计算属性的方式在自组件中使用v-model
+// parent
+<Som v-model="haha" />
+
+// son
+
+```js
+<script setup>
+const haha = computed({
+	get () {
+		return props.haha	
+	},
+	set (value) {
+		emit ('update:haha', value)
+	}
+})
+```
+
+透传
+
+透传会默认将内容绑定到组件的根元素上，可以通过
+defineOptions({ inheritAttrs: false })禁用
+可以通过v-bind="$attrs"的方式绑定，如果attrs没有绑定会抛出错误
+
+1. 透传原理。续props 1中的问题
+
+
+插槽
+
+1. 插槽带来的父子组件生命周期问题
+2. 无渲染组件：包含插槽的组件只包含逻辑，然后将逻辑通过<slot>抛出，当前组件中不进行渲染。
+	
+		这种模式的复用相对于组合式函数会产生额外的开销（需要进行属性传递）。
+
+依赖注入
+
+1. 原理
+2. 为什么可以保持响应式
+
+异步组件
+
+1. 原理
+2. 和<suspense>的组合
+
+组合式函数
+
+1. toValue()与unref()区别：显式的在watch中监听ref，或者在watchEffect中使用toValue()出发监听
+2. ref与reactive在组合式函数中的权衡：后者不太适合作为组合式函数的返回值，因为结构可能导致响应式的丢失
+3. 组合式函数的事件监听在组件销毁中要及时销毁
+4. mixin（https://cn.vuejs.org/guide/reusability/composables.html#comparisons-with-other-techniques）
+    1. 用来组合功能，达到内容的复用
+5. extends：（只适用选项式，组合式请使用组合式函数）
+    1. 继承
+
+自定义指令
+1. 生命周期（https://cn.vuejs.org/guide/reusability/custom-directives.html#directive-hooks）
+
+内置组件
+1. transition组件
+2. keep-alive
+    1. 组件原理
+    2. 更新算法：LRU
+    3. 生命周期：onActivated和onDeactivated在组件挂载和卸载阶段都会被使用
+3. teleport
+    1. 原理
+4. suspense
+5. 还有一些内置指令的原理
+
+# 单文件组件
+
+@vue/compiler-sfc 开发环境下，style注入为原生的标签。打包后会被抽取合并到一个文件中
+
+
+# 性能优化
+
+1. 如何进行性能分析
+
+    chrome performance
+
+2. 指标
+    1. 
+3. 如果对象层级非常深或者在监听DOM变化时，建议使用shallowRef和shallowReactive()声明响应式数据
+4. https://web.dev/explore/fast?hl=zh-cn
+
+# 安全问题
+
+1. vue解析安全：HTML内容使用textContent、Attribute使用setAttribute，类似WEB API完成，只有当浏览器出现问题的时候才有可能导致安全问题
+
+# 调试
+
+vue在使用时如何进行调试
+
+# 思考一下项目中的状态
+
+1. 场景介入：比如MD这种大型系统，是否适合使用常规的Pinia，或者使用其他类似的状态库

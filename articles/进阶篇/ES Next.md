@@ -10,7 +10,9 @@ ES之前，变量作用域的基本单元是`function`，不过可以通过函�
 `var`声明的变量会沿着作用域链不断向上查找，直至全局作用域下，如果在此期间没有找到变量的声明，会在全局作用域下默认声明变量，导致作用域无效的情况。使用let声明后，JE会将let所在的作用域
 
 
-### [Symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol)
+### Symbol
+
+[Symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol)
 
 ```js
 const sign = Symbol('this is a Symbol')

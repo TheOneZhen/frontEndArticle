@@ -36,12 +36,12 @@
 4. postCss
 5. Web Worker
 6. WebAssembly
-9.  URL构造器
+9. URL构造器
     1. url变基
 10. https://developer.chrome.com/blog/inside-browser-part1/
     1. a series knowledge of browser internal architecture that is separed four partition and this is first part
     2. it include many cartoon images funny and detail
-11. 事件中执行的函数和普通函数有什么区别，比如a标签中会阻碍href的跳转等，以及为什么非空返回值会导致内存泄漏？
+11. this site record some used GPU CSS Property(https://csstriggers.com/)
 
 # list
 
@@ -81,17 +81,18 @@
 # 其他内容
 
 1. todo内部积累问题分解
+2. 深入vue
+    1. 首先借助书籍大致了解Vue设计框架
+    2. 然后以API为入口开始将各个模块串联起来
+    3. 最后总结各项重要知识点
 
-# 网站后续设计以及优化
+# Electron基本学习：了解基本API，核心内容原理
 
-- 优化数据库结构，专一化userAction
-- 处理文章中对自己资源的引用
-- 思考：如何对一个算法进行测试，或者说有效的产生测试用例
-- static.存在的问题
+# Nodejs深入学习
+
+这块内容应该优先于其他内容，因为涉及到后端，需要重视
+
+# nestjs + typeorm
 
 
-# 今日内容
-
-1. 知识点复习
-2. 网站bug修复，更新一个demo上去
-3. 找内推
+如果最后所有的内容都有实战就好了

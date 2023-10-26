@@ -249,9 +249,9 @@ const obj = {
 
 推荐使用`Object.getPrototypeOf/Reflect.getPrototypeOf`和`Object.setPrototypeOf/Reflect.setPrototypeOf`取代*直接修改`__proto__`*
 
-## [`class`(ES6)](https://developer.mozilla.org/en-US/docs/Glossary/Class)
+## `class`(ES6)
 
-JS中类的本质是原型链委托，它的表现更偏向于语法糖，很多操作都可以用上面介绍的原型链、this绑定规则来解释。
+JS中[class](https://developer.mozilla.org/en-US/docs/Glossary/Class)的本质是原型链委托，它的表现更偏向于语法糖，很多操作都可以用上面介绍的原型链、this绑定规则来解释。
 
 ```js
 A // ReferenceError

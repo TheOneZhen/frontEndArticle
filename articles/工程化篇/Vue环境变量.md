@@ -1,8 +1,8 @@
 环境变量一般用来区分开发、测试、生产环境，更夸张的还可以用来模块化打包、功能定制化。本篇将介绍Vue在[Vue-CLI][Vue-CLI]、[webpack][webpack]、[Vite][Vite]脚手架或构建工具下如何使用环境变量以及它们的区别。
 
-# [Webpack][Webpack]
+# Webpack
 
-Webpack环境变量需要通过指令的方式传递：
+[Webpack][Webpack]环境变量需要通过指令的方式传递：
 
 ```sh
 # shell
@@ -58,9 +58,9 @@ webpack --env goal=local --env production
     ```
 
 
-# [Vue-CLI][Vue-CLI]
+# Vue-CLI
 
-Vue-CLI是一个脚手架，用来快速初始化Vue项目，是Webpack的sugar。Vue2时官方还是推荐使用Vue-CLI初始化项目，Vue3之后推荐使用`Vite create-vue`来初始化项目。
+[Vue-CLI][Vue-CLI]是一个脚手架，用来快速初始化Vue项目，是Webpack的sugar。Vue2时官方还是推荐使用Vue-CLI初始化项目，Vue3之后推荐使用`Vite create-vue`来初始化项目。
 
 - [模式(Modes)](https://cli.vuejs.org/guide/mode-and-env.html#modes)
 
@@ -110,9 +110,9 @@ Vue-CLI是一个脚手架，用来快速初始化Vue项目，是Webpack的sugar�
 
     然后使用指令`vue-cli-service serve --mode dev`启动。
 
-# [Vite][Vite]
+# Vite
 
-Vite延续了Vue-CLI风格（模式和环境变量），但是取消了固定前缀限制（VUE_APP_*），并新增了静态替换。比如你想在本地开发环境自动登录且不需要license验证，并且添加一个私密ID用于构建环境，可以这样写（注释代表不同文件）：
+[Vite][Vite]延续了Vue-CLI风格（模式和环境变量），但是取消了固定前缀限制（VUE_APP_*），并新增了静态替换。比如你想在本地开发环境自动登录且不需要license验证，并且添加一个私密ID用于构建环境，可以这样写（注释代表不同文件）：
 
 ```js
 // .env
