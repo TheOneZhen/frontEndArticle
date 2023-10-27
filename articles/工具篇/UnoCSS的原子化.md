@@ -171,7 +171,7 @@ export default defineConfig({
 最后会被解析为：
 
 ```css
-.g-margin-3%-40vw-30rem-20px {
+.g-margin-3%-40vw-30rem {
   margin: 3% 40vw 30rem;
 }
 ```
