@@ -6,7 +6,7 @@
 
 # 前言
 
-Pinia是Vue.js的一个状态管理库，它可以辅助实现跨组件、页面状态共享，也是Vuex的替代方案。本篇将从Pinia的API作为入口分析其源码，最后简单探讨其依赖和抽象，得出结构图。
+Pinia是Vue.js的一个状态管理库，它可以辅助实现跨组件、页面状态共享，也是Vuex的替代方案。本篇将从Pinia的API作为入口分析其源码，最后简单探讨其设计。
 
 > - Pinia版本：v2.1.7；
 > - 仓库地址：[https://github.com/vuejs/pinia](https://github.com/vuejs/pinia)；
@@ -20,7 +20,7 @@ Pinia是Vue.js的一个状态管理库，它可以辅助实现跨组件、页面
 
 > 源码地址：src/createPinia.ts
 
-`createPinia`中使用了`effectScope`，它可以自动收集同步函数中的`effect`、`computed`、`watch`、`watchEffect`，用于统一处理。`createPinia()`会返回Pinia实例，包含：
+`createPinia`中使用了`effectScope`，它可以自动收集同步函数中的`effect`、`computed`、`watch`、`watchEffect`，用于统一处理。`createPinia()`会返回Pinia实例，包含以下属性：
 
 - `install`：Vue插件要求的方法，详情查看[Vue-插件](https://cn.vuejs.org/guide/reusability/plugins.html)；
 - `state`：所有Store的状态收集（root state）
@@ -43,7 +43,7 @@ Pinia是Vue.js的一个状态管理库，它可以辅助实现跨组件、页面
 - `_e`：该Pinia实例的`effectScope`
 - `_s`：通过该Pinia实例注册的Store
 
-在`install`和`use`方法中会判断Vue版本，Vue3版本会将pinia实例注入全局，并且可以通过`app.config.globalProperties.$pinia`访问pinia实例。
+在`install`和`use`方法中会判断Vue版本，Vue3版本会将Pinia实例注入全局，并且可以通过`app.config.globalProperties.$pinia`访问pinia实例。
 
 ```ts
 export function createPinia(): Pinia {
@@ -96,7 +96,9 @@ export function createPinia(): Pinia {
 
 ## useStore
 
-`useStore`作为`defineStore`闭包存在，使用`defineStore`会返回**唯一的**`useStore`（`defineStore`内部会为`useStore`添加`$id`属性）。因为Store可能不在SFC中实例，`useStore()`获取pinia上下文会先判断是否存在组件实例——使用`hasInjectionContext`判断当前上下文是否可以使用`inject()`，如果可以返回`true`。然后再通过`inject(piniaSymbol, null)`尝试获取pinia实例，如果存在将其设置为`activePinia`。
+> 源码地址：src/store.ts
+
+`useStore`作为`defineStore`闭包存在，使用`defineStore`会返回**唯一的**`useStore`（`defineStore`内部会为`useStore`添加`$id`属性）。因为Store可能不在SFC中调用，`useStore()`获取pinia上下文会先判断是否存在组件实例——使用`hasInjectionContext`判断当前上下文是否可以使用`inject()`，如果可以返回`true`。然后再通过`inject(piniaSymbol, null)`尝试获取pinia实例，如果存在将其设置为`activePinia`。
 
 ```ts
   function useStore(pinia?: Pinia | null, hot?: StoreGeneric): StoreGeneric {
@@ -125,7 +127,7 @@ export function createPinia(): Pinia {
   }
 ```
 
-store类型判断是在`defineStore`中、`useStore`前进行并得到出`isSetupStore`，进而进行状态转换——`createSetupStore`和`createOptionsStore`。
+Store语法类型判断是在`defineStore`中、`useStore`生命前进行，根据结果值`isSetupStore`选择组合式语法`createSetupStore`或选项式语法`createOptionsStore`。
 
 ### createOptionsStore
 
@@ -157,7 +159,7 @@ function createOptionsStore<
 }
 ```
 
-因为选项式中State是函数，为了保证其单例特性，`setup`中会根据`pinia.state`判断当前Store的State是否已经被声明。在`createSetupStore`也有类似的逻辑，但是那个逻辑主要是为了维护应用的稳健（可能会有人使用组合式和选项式声明同一个Store）。`setup`会返回`Record<string, Ref>`结构，它是`state`、`actions`和`getters`的混合。因为`getters`类似Vue中的计算属性，依赖State，所以这里`getters`使用`computed`包装，保证其this指向当前Store。
+因为选项式中State是函数，为了保证其单例特性，`setup`中会根据`pinia.state`判断当前Store的State是否已经被声明。在`createSetupStore`也有类似的逻辑，但是那个逻辑主要是为了维护应用的稳健（可能会有人使用组合式和选项式声明同一个Store）。`setup`会返回`Record<string, Ref>`结构，它是`state`、`actions`和`getters`的混合。因为`getters`类似Vue中的计算属性，依赖State，所以这里`getters`使用`computed`包装并保证this指向。
 
 ```ts
 function setup() {
@@ -193,7 +195,7 @@ function setup() {
 
 ### createSetupStore
 
-这是一个高度抽象的方法，上面介绍的`createOptionsStore`来到了这里，里面包含了Store的所有内置操作。代码多，这里分段展示。
+> `createSetupStore`里面包含了Store的所有内置操作。代码多，这里分段展示。
 
 首先是方法类型注解，这里可根据参数名去理解参数的含义，不用看泛型：
 
@@ -232,14 +234,16 @@ if (isVue2) {
 }
 ```
 
-在`createOptionsStore`中，通过执行`setup()`获取State然后绑定到全局状态树（State Tree，`pinia.state.value`）。但是组合式语法中不能这么做，因为组合式语法返回的是一个普通对象，这也是不允许解构使用State的原因，解决方案是通过`effectScope`收集响应式effects。但还需要作进一步的处理：
+在`createOptionsStore`中，通过执行`setup()`获取State然后绑定到全局状态树（State Tree，`pinia.state.value`）。但在组合式语法中不能这么做，因为组合式语法返回的是一个普通对象（这也是不允许解构使用State的原因）。解决方案是通过`effectScope`收集响应式effect，但还需要作进一步的处理：
 
 - 分离响应式数据，并保持数据同步；
 - 分离action，并使用`wrapAction`包装action。
 
-因为`wrapAction`是为`store.$onAction`做铺垫的，Store的内置方法最后再介绍，这里先介绍第一个。参看`if (initialState && shouldHydrate(prop)) { ... }`这段代码，上面的代码中有给出`initialState`的声明，这里有一个妙点，通过判断`initialState`是否为`undefined`来断定Store是否是第一次调用。如果不是第一次调用，会同步数据，间接单例约束Store。为了过滤普通对象（可以理解为没有经过响应式包装的对象），应用了`shouldHydrate`方法。
+> `wrapAction`是为`store.$onAction`做铺垫的，简介属于Store内置方法，最后再介绍。
 
-`shouldHydrate`方法层级太高，这里不方便展示。大家可能对`hydrate`迷惑，举一个应用场景：页面刷新时状态重置。`hydrate`大致就是混合的意思，不过选项式语法提供了API，组合式需要我们自己在pinia实例那里去设置初始化数据。
+参看`if (initialState && shouldHydrate(prop)) { ... }`这段代码，上面的代码中有给出`initialState`的声明，这里有一个妙点，通过判断`initialState`是否为`undefined`来断定Store是否是第一次调用。如果不是第一次调用，会同步数据，间接单例约束Store。
+
+`shouldHydrate`方法层级太高，这里不方便展示。大家可能对`hydrate`迷惑，举一个应用场景：页面刷新时状态重置。`hydrate`大致就是混合的意思，不过选项式语法提供了[hydrate](https://pinia.vuejs.org/zh/api/interfaces/pinia.DefineStoreOptionsInPlugin.html#hydrate)，组合式语法需要在Store定义之前为状态赋初始值。
 
 ```ts
 const setupStore = runWithContext(() =>
@@ -324,7 +328,7 @@ if (
 }
 ```
 
-接下来是处理Store的内置方法，我们先看下store的数据结构（这里我直接使用了源码的`partialStore`，因为该中间结构是为了解决开发、调试环境的问题，生成环境全等于结果值`store`）。
+接下来是处理Store的内置方法，先看下Store的数据结构（这里直接使用了源码的`partialStore`，因为该中间结构是为了解决开发、调试环境的问题，生产环境等同于结果值`store`）。
 
 ```ts
 const store = {
@@ -507,3 +511,143 @@ function $dispose() {
   pinia._s.delete($id)
 }
 ```
+
+## mapHelpers
+
+> 源码地址：src/mapHelpers.ts
+> mapHelpers不是API，而是mapper类方法的集合
+
+这里仅介绍`mapActions`，其他代码都在一个地方，代码逻辑相似。`mapActions`可以直接获取Store中的actions，[官网举例](https://pinia.vuejs.org/zh/api/modules/pinia.html#mapactions)。
+
+```ts
+/**
+ * Allows directly using actions from your store without using the composition
+ * API (`setup()`) by generating an object to be spread in the `methods` field
+ * of a component.
+ *
+ * @param useStore - store to map from
+ * @param keysOrMapper - array or object
+ */
+export function mapActions<
+  Id extends string,
+  S extends StateTree,
+  G extends _GettersTree<S>,
+  A,
+  KeyMapper extends Record<string, keyof A>
+>(
+  useStore: StoreDefinition<Id, S, G, A>,
+  keysOrMapper: Array<keyof A> | KeyMapper
+): _MapActionsReturn<A> | _MapActionsObjectReturn<A, KeyMapper> {
+  return Array.isArray(keysOrMapper)
+    ? keysOrMapper.reduce((reduced, key) => {
+        // @ts-expect-error
+        reduced[key] = function (
+          this: ComponentPublicInstance,
+          ...args: any[]
+        ) {
+          return useStore(this.$pinia)[key](...args)
+        }
+        return reduced
+      }, {} as _MapActionsReturn<A>)
+    : Object.keys(keysOrMapper).reduce((reduced, key: keyof KeyMapper) => {
+        // @ts-expect-error
+        reduced[key] = function (
+          this: ComponentPublicInstance,
+          ...args: any[]
+        ) {
+          return useStore(this.$pinia)[keysOrMapper[key]](...args)
+        }
+        return reduced
+      }, {} as _MapActionsObjectReturn<A, KeyMapper>)
+}
+```
+
+从上面的代码可以看出，mapper其实是帮我们简化了Pinia内容的获取，并且扩展接口，使用户可以使用数组获取数据或使用键值对解构赋值数据。如果Store中存在副作用（比如`console.log`），不会跳过它们。
+
+一般地项目中使用Store，可能会封装StoreManager这样的状态类统一管理Store，这个时候有必要参考这些mapper以规避小坑，比如`useStore($pinia)`：获取Store时会将Store所在的Pinia实例传进去。
+
+## storeToRefs
+
+官方解释是：创建一个引用对象，包含 store 的所有 state、 getter 和 plugin 添加的 state 属性。 类似于 toRefs()，但专门为 Pinia store 设计， 所以 method 和非响应式属性会被完全忽略。
+
+```ts
+/**
+ * Creates an object of references with all the state, getters, and plugin-added
+ * state properties of the store. Similar to `toRefs()` but specifically
+ * designed for Pinia stores so methods and non reactive properties are
+ * completely ignored.
+ *
+ * @param store - store to extract the refs from
+ */
+export function storeToRefs<SS extends StoreGeneric>(
+  store: SS
+): StoreToRefs<SS> {
+  // See https://github.com/vuejs/pinia/issues/852
+  // It's easier to just use toRefs() even if it includes more stuff
+  if (isVue2) {
+    // @ts-expect-error: toRefs include methods and others
+    return toRefs(store)
+  } else {
+    store = toRaw(store)
+
+    const refs = {} as StoreToRefs<SS>
+    for (const key in store) {
+      const value = store[key]
+      if (isRef(value) || isReactive(value)) {
+        // @ts-expect-error: the key is state or getter
+        refs[key] =
+          // ---
+          toRef(store, key)
+      }
+    }
+
+    return refs
+  }
+}
+```
+
+# 结构分析
+
+上一节是以API为入口解析源码，但是有些盲人摸象，不能了解Pinia整体，本节将会从Pinia的抽象和依赖出发去分析Pinia的结构。先看Pinia官网上的一个问题解答——[为什么你应该使用 Pinia？](https://pinia.vuejs.org/zh/introduction.html#why-should-i-use-pinia)。
+
+得益于Vue3的灵活性，Pinia很难和`export const state = reactive({})`拉开差距，但是如果纯粹使用后者实现WEB开发的状态管理，其实大部分项目都无法接受其带来的成本，也就是说Pinia在一些地方存在巨大的优势。
+
+从API一节我们知道，Pinia实例创建后，`pinia`的`_s`、`_p`、`state`属性是连接其他API的核心，其中`state`属性最为关键。
+
+```ts
+// main.ts
+const pinia = createPinia()
+// useStore.ts
+const UseStore = defineStore(() => {})
+const useStore = UseStore()
+```
+
+假设项目中存在上面代码，我们通过时序图来了解Pinia实例和Store内部联系。
+
+```mermaid
+sequenceDiagram
+    autonumber
+    pinia -->> $state: 提供初始化状态数据（hydrate）
+    pinia ->> $state: 提供pinia._p，扩展状态
+    participant $state as store.$state
+    $state ->> pinia: 混合（hydrate）初始状态数据
+    loop
+        $state ->> pinia: 与pinia.state保持数据同步
+    end
+    participant $patch as store.$patch
+    loop 每次store.$state更新时
+        $patch ->> $state: 为状态打补丁
+    end
+    participant $subscribe as store.$subscribe
+    $subscribe -->> $state: 订阅状态变化
+```
+
+Pinia使用Store将一些states包裹住，然后使用复杂的逻辑以及依赖`vue-demi`来保持其响应式，实际上最后库的运行还是围绕那些states。本质没有改变，并且多了对`__DEV__`、`DevTools`、`HMR`、`SSR`、`Vue2`和`Vue3`的支持，以及不断的迭代带来的稳定性。再回到官网的那个问题，应该会有更新的了解。
+
+# 总结
+
+Pinia代码量少，很多风格与Vue系其他库相仿，适合作为Vue3这类大框架的**新手村**（比如由此扩展到`vue-demi`或API `effectScope`）。完事。
+
+# 引用
+
+- https://pinia.vuejs.org/
