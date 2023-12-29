@@ -13,71 +13,48 @@
 
 # 留白
 
-1. 性能优化相关
-    1. props更新时会导致组件的刷新，对于容器来说，单个容器元素的更新会导致容器内全部组件重新渲染
-    2. 可以加入状态转换props，使组件在必要的时候更新或者卸载
-    3. 或者使用v-once或v-memo指令
-    4. 虚拟列表
-    5. shallowRef与shallowReactive斩断深层响应式
-    6. 避免组件树超功能多次调用（VNode是性能优化关键）
-2. ts类型检查理解
-    1. 开发过程中的类型检查
-    2. vscode内置ts语言服务实例
-    3. volar（外部插件）ts语言服务实例
-    4. 编译过程中的类型检查
-    5. webpack：只是单文件的检查，不能介入全局
-    6. vite
-3. vue类型检查
-    1. vue编译器不会抓取导入的文件进行分析源类型，所以导入的module不能做为props泛型（defineProps<{}>()）
-    2. props使用基于类型的声明时，不能赋默认值，需要调用额外的方法widthDefault
-    3. provide/inject类型标注需要借助InjectionKey（继承自Symbol的泛型类型）
-    4. 如何获取组件返回值类型（defineExpose1）：<InstanceType<typeof Component>>
-    5. 扩展全局属性
-4. postCss
-5. Web Worker
-6. WebAssembly
-9. URL构造器
+1. postCss
+2. WebAssembly
+3. URL构造器
     1. url变基
-10. https://developer.chrome.com/blog/inside-browser-part1/
+4.  https://developer.chrome.com/blog/inside-browser-part1/
     1. a series knowledge of browser internal architecture that is separed four partition and this is first part
     2. it include many cartoon images funny and detail
-11. this site record some used GPU CSS Property(https://csstriggers.com/)
-
-# list
-
-- 简历内容梳理（最好每天都进行一次）
-- 不同宿主环境下的事件循环（文章）
-- 网站博客内容结构调整（非面试内容）
-    - 二级域名（t）
-    - 工程化相关实践
-        - 资源结构调用优化
-            - 文章编写的时候可以直接通过文章名链接文章，打包的时候替换成domain + article name
-            - 打包的时候把所有的静态文件收纳到静态服务器中，并替换路径
-        - 打包
-            - 捕捉引用的资源到单独目录
-            - 捕捉文章到单独目录
-        - 更新
-            - 文章前面添加标识，拥有标识的才打包（探索一下有什么办法能知道每次更新了哪些文件，减少不必要的更新）
-
-
-- vite插件
-- webpack loader
-    - 文章工程化打包
-    - 最后生成俩个目录，静态资源文件（图片等）上传到服务端static.。
-    - 文章相关内容重新构建，生成动态内容，触发脚本执行内容插入。
-
+5.  this site record some used GPU CSS Property(https://csstriggers.com/)
 
 # vue源码https://github.com/ygs-code/vue
 
-# 一些边缘库的学习
-Vueuse、lodash、Babel
+# 考虑CSS media的能力范围
 
-# 缓存内容消化
+# articles to do list
+1. animated signature 浅尝（该文目的是快速获得star）
+2. redux源码解析(待定，类状态管理应该改为对Vue3状态管理的思考)
+3. theme模块构建
+4. Vue原理与设计
+    1. effectScope
+5. 迭代、如何设计程序以及如何实现优雅的代码
+6. https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API#%E5%BA%93
+    1. canvas有很多库可以参考
 
-# 算法、解题、分析方法论学习
-
-# shadow DOM
-
-# action state好像存在问题，没有动态绑定组件实例（组件实例订阅状态变化），会不会导致状态刷新组件不刷新的情况
-
-true
+# 梦幻规划（现在开始拒绝充值）
+1. 补充戒指、耳饰
+    1. 耳饰法防：伤 + 暴
+    2. 耳饰法伤：法伤 + 速度
+2. 补充召唤兽装备：壁垒套 * 4
+3. 洗属性点（DT属性点有问题）
+    1. 先上2500伤
+4. 补充手镯、配饰
+    手镯（封 + 防 + 法防）
+    1. 手镯：抗封 + 血 + 防
+    2. 配饰：速度 + 血 + 防、
+5. 补充人物宝石
+6. 补充召唤兽装备及宝石（速度320+，DT同）
+    1. 更新召唤兽装备：攻击套
+    2. 速度
+7. 提升宠物修炼，优先攻击修炼到15
+8. 更新坐骑，成才1.3
+    1. 达到1.3的坐骑开天劈地
+9.  然后消耗SM和NE的帮贡，优先补充生活技能，将所有号集中到一个帮派
+10. 将人修提升至20
+11. 补齐LG、NE、DT师门技能，开始渡劫
+12. 升级至159
