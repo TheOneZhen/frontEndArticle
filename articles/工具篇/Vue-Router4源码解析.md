@@ -11,4 +11,6 @@ Vue Router是 Vue 的官方路由，与 Vue.js 核心深度集成。本篇将从
 
 ## createRouter
 
-`createRouter()`会返回一个 Router 实例
+`createRouter()`会返回一个 Router 实例，然后交给`Vue App`使用。
+
+<!-- 先从createrouter option下手 -->
