@@ -1,5 +1,5 @@
 # 前言
-
+<!-- 最后文章内部代码的换行更换为2，如果感觉不适的话 -->
 Vue Router是 Vue 的官方路由，与 Vue.js 核心深度集成。本篇将从 Vue Router 4（for Vue3）的 API 作为入口分析其源码，最后简单探讨其设计。
 
 > - Vue Router版本：4.2.5；
@@ -22,8 +22,8 @@ Vue Router是 Vue 的官方路由，与 Vue.js 核心深度集成。本篇将从
 2. 一个正常的业务流程，Vue-Router做了哪些事情
 
 # API
-
-从API去了解框架可能无法帮助我们熟悉框架的整体结构、关联，但是可以让我们对各个API的细节变得清晰。我们先看下Vue-Router的基本使用。
+<!-- 先从输入输出的视角去看 -->
+先看下Vue-Router的基本使用。
 
 ```ts
 // main.ts
@@ -37,7 +37,7 @@ const routes = [
 const router = createRouter({
     history: VueRouter.createWebHashHistory(),
     routes
-}) 
+}/** type `RouterOptions` */)
 
 createApp()
     .use(router)
@@ -46,3 +46,28 @@ createApp()
 
 ## RouterOptions
 
+`createRouter`内部关联太多，上来就看属实冒昧，我们先看下传入的参数类型`RouterOptions`：
+
+```ts
+interface RouterOptions extends PathParserOptions {
+    history: RouterHistory
+    routes: Readonly<RouteRecordRaw[]>
+    scrollBehavior?: RouterScrollBehavior
+    parseQuery?: typeof originalParseQuery
+    stringifyQuery?: typeof originalStringifyQuery
+    linkActiveClass?: string
+    linkExactActiveClass?: string
+}
+```
+
+### history
+
+`history`配置允许用户选择不同的历史记录模式，对于浏览器环境，提供了**Hash模式**和**HTML5模式**；对于Node和SSR环境，提供了**Memory模式**；为了方便操作路由，不同模式返回的数据结构同是`RouterHistory`。
+
+
+
+```
+### routes
+
+### scrollBehavior
+https://router.vuejs.org/zh/guide/advanced/scroll-behavior.html#%E6%BB%9A%E5%8A%A8%E8%A1%8C%E4%B8%BA
