@@ -3,15 +3,18 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "node build.js",
-    "prepare": "husky install",
-    "diff": "node genDiff.js"
+    "build": "rimraf ./dist && node build.js",
+    "prepare": "husky install"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "rimraf": "^5.0.5"
   },
   "devDependencies": {
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
+  },
+  "update": {
+    
   }
 }
