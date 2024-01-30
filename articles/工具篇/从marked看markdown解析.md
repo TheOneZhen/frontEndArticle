@@ -1,7 +1,3 @@
-```zhenisbusy
-{ "tagIds": ["前端"] }
-```
-
 项目中一般接触到的是富文本解析，很少对markdown深入。marked是一款markdown解析和编译的工具，相较于WangEditor等开源富文本组件，marked接触到的内容也更原始。本篇将从marked入手，探索其结构设计，分析利弊并完成简单应用。
 
 # marked结构设计

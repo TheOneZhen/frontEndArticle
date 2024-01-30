@@ -1,6 +1,3 @@
-```zhenisbusy
-{ "tagIds": ["前端"] }
-```
 环境变量一般用来区分开发、测试、生产环境，更夸张的还可以用来模块化打包、功能定制化。本篇将介绍Vue在[Vue-CLI][Vue-CLI]、[webpack][webpack]、[Vite][Vite]脚手架或构建工具下如何使用环境变量以及它们的区别。
 
 # Webpack
