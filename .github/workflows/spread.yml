@@ -1,32 +1,29 @@
-# name: spread
-# on:
-#   push:
-#     branchs:
-#       - master
-# jobs:
-#   build:
-#     runs-on: ubuntu-20.04
-#     steps:
-#       - uses: actions/checkout@v3
-#         with:
-#           fetch-depth: 0
-#       - uses: actions/setup-node@v3
-#         with:
-#           node-version: 16
-#       - name: build
-#         run: npm run build
-#       - name: get-diff
-#         run: node genDiff.js ${{ github.event.before }} ${{ github.event.after }}
-#       - name: deploy
-#         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
-#         with:
-#           host: ${{ secrets.HOST_SERVER }}
-#           user: ${{ secrets.USERNAME_SERVER }}
-#           pass: ${{ secrets.PASSWORD_SERVER }}
-#           connect_timeout: 10s
-#           scp: |
-#             "./static" => /var/www/
-#             'update.json' => /var/www/server/
-#           last_ssh: |
-#             cd /var/www/server
-#             /root/anaconda3/envs/python3_10_4/bin/python SPOP.py
+name: spread
+on:
+  push:
+    branchs:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: build
+        run: npm run build ${{ github.event.before }} ${{ github.event.after }}
+      - name: deploy
+        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+        with:
+          host: ${{ secrets.HOST_SERVER }}
+          user: ${{ secrets.USERNAME_SERVER }}
+          pass: ${{ secrets.PASSWORD_SERVER }}
+          connect_timeout: 10s
+          scp: |
+            "./dist" => /var/www/server/
+          last_ssh: |
+            cd /var/www/server
+            /root/anaconda3/envs/python3_10_4/bin/python SPOP.py
