@@ -25,7 +25,8 @@ jobs:
           pass: ${{ secrets.PASSWORD_SERVER }}
           connect_timeout: 10s
           scp: |
-            "./dist" => /var/www/server
+            "./static" => /var/www/
+            'update.json' => /var/www/server/
           last_ssh: |
             cd /var/www/server
             /root/anaconda3/envs/python3_10_4/bin/python SPOP.py
