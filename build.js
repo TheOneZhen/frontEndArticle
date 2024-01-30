@@ -26,7 +26,7 @@ function move (targetDir) {
 function genUpadte () {
   /**  */
   /** 后端处理该数据顺序：先删除，再新增，最后修改 */
-  const diff = { add/** 新增 */: {}, modify/** 修改 */: {}, delete/** 删除 */: [], else/** 其他类型 */: [] }
+  const diff = []
   execSync('git config --global core.quotepath false')
   execSync(`git diff ${ process.argv[2] || '' } ${ process.argv[3] || '' } --name-status`)
     .toString()
@@ -35,6 +35,17 @@ function genUpadte () {
     .forEach(row => {
       const status = row.slice(0, 1), tokens = row.split(' ').filter(Boolean)
       /** 如果是重命名，需要先删除再添加 */
+      if (status === 'D') {
+        diff.push({
+          type: "delete",
+          title: tokens[1]
+        })
+      } else if (status === 'A') {
+        diff.push({
+          type: "add",
+          title: ""
+        })
+      }
       if (status === 'R') {
         const oldName = 
       }
