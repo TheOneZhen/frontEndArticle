@@ -1,4 +1,5 @@
-const { readdirSync, statSync, copyFileSync, existsSync, mkdirSync, writeFileSync, readFileSync } = require('fs')
+const { execSync } = require('child_process')
+const { readdirSync, statSync, copyFileSync, mkdirSync, writeFileSync, readFileSync, existsSync } = require('fs')
 const { resolve } = require('path')
 
 /**
@@ -56,7 +57,8 @@ function genUpadte () {
         if (!articleMap.has(fileName)) {
           console.error(`Can't find the file ${fileName}, please check it!`)
         } else {
-          item.content = readFileSync(articleMap.get(fileName)).toString()
+          const filePath = articleMap.get(fileName)
+          existsSync(filePath) && (item.content = readFileSync(filePath).toString())
         }
       })
     }

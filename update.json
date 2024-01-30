@@ -1,0 +1,10 @@
+{
+  "articles": {
+    "type": "delete",
+    "title": "微前端篇",
+    "data": {
+      "title": "不是微前端篇",
+      "content": "aaa"
+    }
+  }
+}

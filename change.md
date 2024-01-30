@@ -1,13 +1,3 @@
-```zhenisbusy
-    {
-        "articleName": { // 旧文章名
-            "title": "", // 新文章名
-            "update_time": "",
-            "description": ""
-        }
-    }
-```
-
 更新了xxx内容，然后xxxx[]
 
 对于资源，全量替换（直接覆盖服务器目录），缓存、文件指纹什么的后续考虑。
