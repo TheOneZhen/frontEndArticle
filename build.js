@@ -29,7 +29,7 @@ function move (targetDir) {
       
       if (status.isDirectory()) move(path)
       else if (/\.(png|svg|jpg|jpeg)/i.test(name)) copyFileSync(path, resolve(__STATIC__, name))
-      else articleMap.set(name, path)
+      else if(/\.(md)/i.test(name)) articleMap.set(name, path)
     })
 }
 
@@ -53,7 +53,7 @@ function genUpadte () {
     
     if (articles !== undefined) {
       articles.forEach(item => {
-        const fileName = item.data.title || item.title // 优先使用更新的名称
+        const fileName = (item.data.title || item.title) + '.md' // 优先使用更新的名称
         if (!articleMap.has(fileName)) {
           console.error(`Can't find the file ${fileName}, please check it!`)
         } else {
