@@ -2,10 +2,7 @@
   "articles": [
     {
       "type": "delete",
-      "title": "微前端篇",
-      "data": {
-        "content": "aaa"
-      }
+      "title": "《WebKit技术内幕》1-4章摘要及补充"
     }
   ]
 }

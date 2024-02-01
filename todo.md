@@ -19,8 +19,8 @@
 {
   "articles": [
     {
-      "type": "delete", // OP type
-      "title": "articleName", // maybe old title
+      "type": "delete | add | update", // OP type, not null
+      "title": "articleName", // maybe old title, not null
       "data": { // data S insert into DB straightly
         "title": "xxx", // maybe new title
         "update_time": ""

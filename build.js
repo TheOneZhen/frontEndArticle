@@ -58,7 +58,10 @@ function genUpadte () {
           console.error(`Can't find the file ${fileName}, please check it!`)
         } else {
           const filePath = articleMap.get(fileName)
-          existsSync(filePath) && (item.content = readFileSync(filePath).toString())
+          const data = item.data || {}
+          if (data.title === undefined) data.title = item.title
+          if (existsSync(filePath)) data.content = readFileSync(filePath).toString()
+          item.data = data
         }
       })
     }
