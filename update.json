@@ -1,8 +1,21 @@
 {
   "articles": [
     {
-      "type": "delete",
-      "title": "《WebKit技术内幕》1-4章摘要及补充"
+      "type": "add",
+      "title": "八股文",
+      "data": {
+        "tagIds": ["前端", "面试"]
+      }
+    }
+  ],
+  "tags": [
+    {
+      "type": "add",
+      "title": "面试",
+      "data": {
+        "title": "面试",
+        "dedescription": "这是一段测试文字"
+      }
     }
   ]
 }

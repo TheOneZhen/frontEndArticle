@@ -53,7 +53,7 @@ function genUpadte () {
     
     if (articles !== undefined) {
       articles.forEach(item => {
-        const fileName = (item.data.title || item.title) + '.md' // 优先使用更新的名称
+        const fileName = (item?.data?.title || item.title) + '.md' // 优先使用更新的名称
         if (!articleMap.has(fileName)) {
           console.error(`Can't find the file ${fileName}, please check it!`)
         } else {

@@ -27,7 +27,13 @@
       }
     }
   ],
-  "tags": []
+  "tags": [
+    {
+      "type": "delete, add, update",
+      "title": "",
+      "data": {}
+    }
+  ]
 }
 ```
 
