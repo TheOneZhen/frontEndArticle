@@ -1,42 +1,5 @@
-# 文章目录结构设计
-
-- 列表引出（：）、标题(`#`)、列表(`1.`)、块(`>`)、文本结束后需要隔一行
-- tab是四个空格
-- 对于标题
-    - 范围`# - ###`再多网页和vscode表现不明显
-- 内容
-    - 背景区块：正常文本介绍，引出以下内容
-        - 特点、特征
-        - ...特殊API介绍
-            - 场景分析（介绍） + 源码（polyfill）
-        - 其他
-
-# 自动化部署相关
-
-`update.json` example:
-
-```json
-{
-  "articles": [
-    {
-      "type": "delete | add | update", // OP type, not null
-      "title": "articleName", // maybe old title, not null
-      "data": { // data S insert into DB straightly
-        "title": "xxx", // maybe new title
-        "update_time": ""
-      }
-    }
-  ],
-  "tags": [
-    {
-      "type": "delete, add, update",
-      "title": "",
-      "data": {}
-    }
-  ]
-}
-```
-
+# 文章格式自动化测试
+将site中的markdown解析独立成组件，并提供测试接口用于测试。
 # todo list
 1. 静态资源更新优化
     1. 不要全量替换，会破环站点缓存
@@ -90,3 +53,6 @@
 
 梦醒后，我简单流下一滴眼泪，然后忘却梦中涌于身体四面八方那难扼的涩感
 
+我察觉到自己对世界的了解，头破出一些规律、下咽了一些教训，最终都无法安全逢生于简单的情感，于是变得更加难过，难过自己无法成为自己理想中的生物。
+
+制定无数计划，假装忙碌，然而在某些迷迷糊糊的时刻，对时间却又豪掷无数。
