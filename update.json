@@ -1,10 +1,9 @@
 {
   "articles": [
     {
-      "type": "add",
+      "type": "update",
       "title": "结构化克隆算法",
       "data": {
-        "tagIds": ["前端", "浏览器原理"],
         "createTime": "2023-10-01"
       }
     }
