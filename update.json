@@ -5,7 +5,7 @@
       "title": "《WebKit技术内幕》5-8章摘要及补充",
       "data": {
         "description": "《WebKit技术内幕》5-8内容总结",
-        "tagId": ["前端", "浏览器原理", "《WebKit技术内幕》"]
+        "tagIds": ["前端", "浏览器原理", "《WebKit技术内幕》"]
       }
     }
   ],
