@@ -19,21 +19,16 @@
 2. animated signature 浅尝（该文目的是快速获得star）
 3. Vue-Router
 4. redux源码解析(待定，类状态管理应该改为对Vue3状态管理的思考)
-5. theme模块构建
-6. Vue原理与设计
+5. Vue原理与设计
     1. effectScope
-7. 迭代、如何设计程序以及如何实现优雅的代码
-8. https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API#%E5%BA%93
+6. 迭代、如何设计程序以及如何实现优雅的代码
+7. https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API#%E5%BA%93
     1. canvas有很多库可以参考
 
-# 学习方向规划
-1. 巩固现有学习内容
-    首要资料来自自己的内容总结，然后是别人的面经。但是更需要系统性学习，建议每天上午系统学习。
-2. 向跨端扩展（PC）
-    flutter可以优先放进简历里。首先是学习PC端跨端框架：
-    1. 框架架构
-    2. 核心原理：主要的原理，类似Vue-Router中路由事件监听
+# learn
 
-    目前主要学习electron和Flutter框架PC部分，并且向移动端拓展（只了解能力 ，不会涉及API）
-
-    面试期间不断完善memore设计，不限制照抄别人的代码。
+- 巩固前端基础
+    - 原理
+    - 工程化
+    - 自动化扩展
+- PC跨端
