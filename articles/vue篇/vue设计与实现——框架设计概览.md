@@ -12,9 +12,7 @@
  */
 ```
 
-# Vue3的优化
-
-> 此节没有出现在原文中
+# 第2章 框架设计的核心要素
 
 ## 代码管理
 ### monorepo代码管理
@@ -49,81 +47,71 @@ if (__DEV__) {
 
 Vue3中优化源码体积的方式有很多种：
 
-1. 打包工具 + 特性开关（参见`rollup.config.js`文件）
+### 特性开关
 
-    Vue.js基于roolup.js对项目进行构建，比如用于区分开发环境的变量`__DEV__`，构建工具会根据这些变量来划分Dead code并在构建时移除。Vue.js在输出资源时会输出用于开发环境的`vue.global.js`和用于生产环境的`vue.global.prod.js`，在生产环境下不会增加警示代码。
+Vue.js基于rollup.js对项目进行构建，比如用于区分开发环境的变量`__DEV__`，构建工具会根据这些变量来划分Dead code并在构建时移除。Vue.js在输出资源时会输出用于开发环境的`vue.global.js`和用于生产环境的`vue.global.prod.js`，在生产环境下不存在警示代码，参见[rollup.config.js](https://github.com/vuejs/core/blob/main/rollup.config.js)。
 
-2. Tree-Shaking
+### Tree-Shaking
 
-    Tree-Shaking和上面介绍的优化方式发生在打包阶段，它们都是通过构建工具实现优化。不过Tree-Shaking依赖ESM的静态结构，参见[rollup Tree-Shaking](https://rollupjs.org/introduction/#tree-shaking)。比如以下文件结构：
+Tree-Shaking和上面介绍的优化方式发生在打包阶段，都是通过构建工具实现优化。不过Tree-Shaking依赖[ESM的静态结构](https://rollupjs.org/introduction/#tree-shaking)。比如以下文件结构：
 
-    ```
-    - demo
-        - package.json
-        - input.js
-        - utils.js
-    ```
-    `input.js`和`utils.js`文件内容：
-    
-    ```js
-    // input.js
-    imporrt { foo } from './utils.js'
-    foo()
-    // utils.js
-    export function foo (obj) {
-        obj && obj.foo
-    }
+```
+- demo
+    - package.json
+    - input.js
+    - utils.js
+```
 
-    export function bar(obj) {
-        obj && obj.foo
-    }
-    ```
+`input.js`和`utils.js`文件内容：
 
-    将`input.js`做为入口文件打包，输出ESM，得到打包内容`bundle.js`：
+```js
+// input.js
+imporrt { foo } from './utils.js'
+foo()
+// utils.js
+export function foo (obj) {
+    obj && obj.foo
+}
 
-    ```js
-    // bundle.js
-    export function foo (obj) {
-        obj && obj.foo
-    }
-    ```
+export function bar(obj) {
+    obj && obj.foo
+}
+```
 
-    可以看到`bar`被移除了。
+将`input.js`做为入口文件打包，输出ESM，得到打包内容`bundle.js`：
 
-    如果一段代码在运行时没有任何副作用，还可以使用`/*#__PURE__*/`注释标记，告诉构建工具在打包时移除此类代码。因为JS本身是动态语言，静态分析存在难度，所以注释标记需要手动添加。Vue.js源码中存在大量`/*#__PURE__*/`，对优化Vue.js代码体积有很大帮助。
+```js
+// bundle.js
+export function foo (obj) {
+    obj && obj.foo
+}
+```
+
+可以看到函数`bar`被移除了。
+
+如果一段代码在运行时没有任何副作用，还可以使用`/*#__PURE__*/`注释标记，告诉构建工具在打包时移除此类代码。JS本身是动态语言，静态分析存在难度，所以注释标记需要手动添加。Vue.js源码中存在大量`/*#__PURE__*/`，对优化Vue.js代码体积有很大帮助。
 
 
-3. 移除部分API
+### 移除部分特性
 
-    动态内容参见[Vue3 迁移指南](https://v3-migration.vuejs.org/zh/)。
+内容参见[Vue3 迁移指南](https://v3-migration.vuejs.org/zh/)，Vue3一些特性、语法与Vue2不兼容，你可以使用[迁移构建开关](https://v3-migration.vuejs.org/zh/migration-build.html#%E5%85%BC%E5%AE%B9%E6%80%A7%E9%85%8D%E7%BD%AE)来禁用或开启兼容性特性。
 
-## 性能优化
+## 新特性
 
 ### 响应式变更
 
 Vue3响应式基础是`Proxy/Reflect`，相较于Vue2使用的`Object.defineProperty`，可以更好地劫持对象操作，降低开发人员心智负担。
 
 > 这里可能会误导大家认为`Object.defineProperty`性能要比`Proxy/Reflect`差，看下这个用例[https://www.measurethat.net/Benchmarks/Show/26436/0/proxy-vs-defineproperty]()，分别使用`Object.defineProperty`、`Proxy/Reflect`和方法访问数据，结果是`Object.defineProperty`性能最好，`Proxy/Reflect`性能最差。
-> 上述用例虽然只是**平面**访问**一层**属性，而非**深度**访问，但可以做为`Proxy/Reflect`性能的反例。
-> 写者没能找到相关知识论据，这里是根据[You-Dont-Know-JS: this & object prototypes](https://github.com/getify/You-Dont-Know-JS/tree/1ed-zh-CN/this%20%26%20object%20prototypes)
-
-
-https://www.measurethat.net/Benchmarks/Show/26436/0/proxy-vs-defineproperty
-https://v8.dev/blog/understanding-ecmascript-part-1
+> 上述用例虽然只是**平面**访问**一层**属性，而非**深度**访问，但可以做为`Proxy/Reflect`性能反例。我没有找到更细节的文章（JS Engine层面），推荐[https://thecodebarbarian.com/thoughts-on-es6-proxies-performance]()，原文中提到`Promise`性能也很差，但是在实践中没有人会因为它的性能而不用它。
 
 ### 渲染优化
 
-Vue2采用双端diff，Vue3采用快速diff。渲染器一篇中会对diff算法详细介绍，这里不再详述。
+Vue2采用双端diff，Vue3采用快速diff。对于Vue中的组件，最终都会变成渲染函数，响应式数据变更时触发渲染函数重新渲染生成新的节点（Nodes）。如果将已经存在的节点销毁再创建新的节点，成本很大。所以需要diff对比出节点差异，然后定向增、删、更新。
+
+
 
 ### 编译优化
 
 1. Fagment
 2. 静态提升
-
-
-# 问题
-
-    4. 框架打包输出内容
-
-        -bundle：用于构建工具使用
-        -global/esm-browser：用于浏览器使用，后者支持ESM
