@@ -96,7 +96,11 @@ export function foo (obj) {
 
 内容参见[Vue3 迁移指南](https://v3-migration.vuejs.org/zh/)，Vue3一些特性、语法与Vue2不兼容，你可以使用[迁移构建开关](https://v3-migration.vuejs.org/zh/migration-build.html#%E5%85%BC%E5%AE%B9%E6%80%A7%E9%85%8D%E7%BD%AE)来禁用或开启兼容性特性。
 
-## 新特性
+## 性能考虑
+
+<img src="https://cn.vuejs.org/assets/render-pipeline.sMZx_5WY.png" alt="Vue组件变化" />
+
+先了解一下Vue组件更新基本流程，**Vue模板**首先会被编译成**渲染函数**，运行时由**渲染器**调用**渲染函数**得到**虚拟DOM**，当依赖更新时，**副作用函数**重新运行得到新的**虚拟DOM**，渲染器会对比新旧虚拟DOM再更新。
 
 ### 响应式变更
 
@@ -109,9 +113,9 @@ Vue3响应式基础是`Proxy/Reflect`，相较于Vue2使用的`Object.defineProp
 
 Vue2采用双端diff，Vue3采用快速diff。对于Vue中的组件，最终都会变成渲染函数，响应式数据变更时触发渲染函数重新渲染生成新的节点（Nodes）。如果将已经存在的节点销毁再创建新的节点，成本很大。所以需要diff对比出节点差异，然后定向增、删、更新。
 
-
-
 ### 编译优化
 
-1. Fagment
-2. 静态提升
+1. 静态提升
+
+    
+2. Fagment
