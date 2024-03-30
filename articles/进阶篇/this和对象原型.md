@@ -218,9 +218,14 @@ const obj = {
     1. `Object.create`简单实现：
         ```js
           Object.create = function (obj) {
-            function _fn() {} // 这个函数相当于一个中间件，最后会被回收掉（也是与Object.setPrototypeOf产生性能差的原因）
+            function _fn() {} // 这个函数最后会被回收掉（也是与Object.setPrototypeOf产生性能差的原因）
             _fn.prototype = obj
             return new _fn()
+          }
+          // 还可以通过`Object.setPrototypeOf`实现
+          Object.create = function (proto) {
+            const res = {}
+            return Object.setPrototypeOf(res, proto)
           }
         ```
     2. 上述简单实现不能向下兼容，因为`Object.create`第二个参数和`Object.defineProperties`描述符设置参数类似，属于ES5规范，参见[MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create)。

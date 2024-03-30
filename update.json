@@ -1,30 +1,9 @@
 {
   "articles": [
     {
-      "type": "add",
-      "title": "《WebKit技术内幕》5-8章摘要及补充",
-      "data": {
-        "description": "《WebKit技术内幕》5-8内容总结",
-        "tagIds": ["前端", "浏览器原理", "《WebKit技术内幕》"]
-      }
-    }
-  ],
-  "tags": [
-    {
-      "type": "add",
-      "title": "前端",
-      "data": {
-        "description": "前端内容，很多很广法。",
-        "images": []
-      }
-    },
-    {
-      "type": "add",
-      "title": "《WebKit技术内幕》",
-      "data": {
-        "description": "虽然一直从事前端开发工作，但是对浏览器了解的不多。《WebKit技术内幕》是我在知乎上得到的一本书，在阅读此书的同时做了一些简单的笔记，希望可以给自己或其他人更多的启发。",
-        "images": []
-      }
+      "type": "update",
+      "title": "this和对象原型",
+      "data": {}
     }
   ]
 }

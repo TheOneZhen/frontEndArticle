@@ -1,3 +1,1 @@
-更新文章[《WebKit技术内幕》5-8章摘要及补充](https://zhenisbusy.space/blog/article/《WebKit技术内幕》5-8章摘要及补充)
-
-更新一些标签。
+更新文章[this和对象原型](https://zhenisbusy.space/blog/article/this和对象原型)，添加`Object.create`的`Object.setPrototypeOf`实现。
