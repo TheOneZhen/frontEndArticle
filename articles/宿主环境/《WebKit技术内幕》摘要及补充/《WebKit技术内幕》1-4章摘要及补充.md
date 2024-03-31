@@ -160,7 +160,7 @@ graph LR;
 
 <img src="https://res.weread.qq.com/wrepub/CB_3300055433_55_1.jpg" alt="WebKit架构" />
 
-上图中虚线部分表示该部分模块在不同浏览器使用的WebKit内核中的实现是不一样的，那其实排除这些基本上没有少一样的。
+上图中虚线部分表示该部分模块在不同浏览器使用的WebKit内核中的实现是不一样的，那其实排除这些基本上没有多少一样的。
 
 ## 基于Blink的Chromium浏览器结构
 
@@ -173,7 +173,7 @@ graph LR;
 
 ### 多进程模型和多线程模型
 
-> 这里展示的chromium项目官网展示的最新版本的多进程模型架构图，原图中介绍的太细致不利于查看整体结构。
+> 这里展示的chromium项目官网展示的最新版本的多进程模型架构图，原图中介绍的太多抽象类不利于查看整体结构。
 
 <img src="https://www.chromium.org/developers/design-documents/multi-process-architecture/arch.png" alt="Chromium多进程模型架构图" />
 
@@ -337,9 +337,9 @@ test1=webkit;test2=chromium;Expires=Sun,30 Oct 201621:35:00 GMT;Domain=.myweb.co
 
 ### 安全机制
 
-HTTP是一种使用明文来传输数据的应用层协议，构建在SSL之上的HTTPS提供了安全的网络传输机制，现已被广泛应用于网络上。Chromium支持一种新的标准——HSTS(HTTP Strict Transport Security)，网络服务器可以通过声明该协议来是自己仅支持HTTPS协议，Chromium可以理解该协议并发送基于HTTPS的连接和请求。
+HTTP是一种使用明文来传输数据的应用层协议，而构建在SSL之上的HTTPS可以提供安全的网络传输机制，现已被广泛应用于网络上。Chromium支持一种新的标准——HSTS(HTTP Strict Transport Security)，网络服务器可以通过该协议来声明自己仅支持HTTPS协议，Chromium可以理解该协议并发送基于HTTPS的连接和请求。
 
-通常情况下，浏览器的用户不会输入`scheme(http://)`，浏览器的补齐功能通常会加入该“scheme”，但是，服务器可能需要`https://`。在这样的情况下，该协议就显得非常有用。服务在返回的消息头中加入以下信息表明它支持该标准：
+通常情况下，浏览器的用户不会输入`scheme(http://)`，浏览器的补齐功能会加入`scheme`，但服务器可能需要`https://`。在这样的情况下，该协议就显得非常有用。服务在返回的消息头中加入以下信息表明它支持该标准：
 
 ```
 Strict-Transport-Security: max-age=16070400; includeSubDomains
