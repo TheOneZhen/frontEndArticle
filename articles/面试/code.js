@@ -1,47 +1,51 @@
-const PENDING = 'PENDING'
-const FULFILLED = 'FULFILLED'
-const REJECTED = 'REJECTED'
+// 矩阵匹配
+const rl = require("readline").createInterface({ input: process.stdin })
+const it = rl[Symbol.asyncIterator]()
+const readline = async () => (await it.next()).value
 
-class Promise {
+void (async function () {
+  const [n, m, k] = (await readline()).split(" ").map(Number)
+  let min = 1, max = -Infinity
+  const matrix = []
 
-  constructor (executor) {
-    this.status = PENDING
-    this.value = undefined
-    this.reason = undefined
+  for (let i = 0; i < n; ++i) {
+    matrix.push((await readline()).split(" ").map(Number))
+    max = Math.max(max, ...matrix[i])
+  }
 
-    this.onResolveCallbacks = []
-    this.onRejectCallbacks = []
+  while (min <= max) {
+    const mid = (min + max) >> 1
+    if (check(min)) max = mid - 1
+    else min = mid + 1
+  }
 
-    let resolve = (value) => {
-      if (this.status === PENDING) {
-        this.status = FULFILLED
-        this.value = value
-        this.onRejectCallbacks.forEach(fn => fn())
+  console.log(min)
+
+  function check (value) {
+    let smallerCount = 0
+    const matched = Array(m).fill(-1)
+
+    for (let i = 0; i < n; ++i) {
+      const visted = Array(m).fill(false)
+      
+      if (dfs(i, value, matched, visted)) smallerCount++
+    }
+
+    return smallerCount >= n - k + 1
+  }
+
+  function dfs (i, value, matched, visted) {
+    for (let j = 0; j < m; ++j) {
+      if (!visted[j] && matrix[i][j] <= value) {
+        visted[j] = true
+
+        if (matched[j] === -1 || dfs(matched[j], value, matched, visted)) {
+          matched[j] = i
+          return true
+        }
       }
     }
 
-    let reject = reason => {
-      if (this.status === PENDING) {
-        this.status = REJECTED
-        this.reason = reason
-        this.onRejectCallbacks.forEach(fn => fn())
-      }
-    }
-
-    try {
-      executor(resolve, reject)
-    } catch (error) {
-      reject(error)
-    }
+    return false
   }
-
-  then (onFulfilled, onRejected) {
-    if (this.status === FULFILLED) onFulfilled(this.value)
-    if (this.status === REJECTED) onRejected(this.reason)
-
-    if (this.status === PENDING) {
-      this.onResolveCallbacks.push(() => onFulfilled(this.value))
-      this.onRejectCallbacks.push(() => onRejected(this.reason))
-    }
-  }
-}
+})()
