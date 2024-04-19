@@ -8,11 +8,22 @@ let activeEffect = undefined
 const effectStack = []
 /**
  * ## 响应式数据存储结构
- * DS: WeakMap<object, Map<string, Function>>
+ * DS: WeakMap<object, Map<string, Set<Function>>>
  */
 const bucket = new WeakMap()
 
-function track () {}
+function track (target, key) {
+  if (!activeEffect) return
+
+  let depsMap = bucket.get(target)
+  if (!depsMap) bucket.set(target, depsMap = new Map())
+
+  let deps = depsMap.get(key)
+  if (!deps) depsMap.set(key, deps = new Set())
+  deps.add(activeEffect)
+  activeEffect.deps.push(deps)
+
+}
 
 function trigger (target, key) {
   const depsMap = bucket.get(target)
@@ -23,7 +34,7 @@ function trigger (target, key) {
   effects && effects.forEach(effectFn => {
     /**
      * ## 避免无限递归
-     * activeEffect执行的时候，会触发所有的activeEffect执行，应该将其过滤掉，避免无限递归执行
+     * 副作用函数还在执行，又有相同的副作用函数要执行，导致无限递归。
      */
     if (effectFn !== activeEffect) effectsToRun.add(effectFn)
   })
@@ -44,14 +55,17 @@ function effect (fn, options = {}) {
     cleanup(effectFn)
     activeEffect = effectFn
     effectStack.push(effectFn)
-    fn()
+    const res = fn()
     effectStack.pop()
     activeEffect = effectStack[effectStack.length - 1]
+
+    return res
   }
 
   effectFn.options = options
   effectFn.deps = []
-  effectFn()
+  if (!options.lazy) effectFn() 
+  return effectFn
 }
 /**
  * ## 调度执行
@@ -72,4 +86,75 @@ function flushJob () {
 function scheduler (fn) {
   jobQueue.add(fn)
   flushJob()
+}
+
+function computed (getter) {
+  let value
+  let dirty = true
+
+  const effectFn = effect(getter, {
+    lazy: true,
+    scheduler () {
+      if (!dirty) {
+        dirty = true
+        trigger(obj, 'value')
+      }
+    }
+  })
+
+  const obj = {
+    get value () {
+      if (dirty) {
+        value = effectFn()
+        dirty = false
+      }
+      track(obj, 'value')
+      return value
+    }
+  }
+
+  return obj
+}
+
+function watch (source, cb, options = {}) {
+  let getter
+  if (typeof source === 'function') getter = source
+  else getter = () => traverse(source)
+
+  let oldValue, newValue
+  let cleanup
+
+  function onInvalidate (fn) {
+    cleanup = fn
+  }
+
+  const job = () => {
+    newValue = effectFn()
+    if (cleanup) cleanup()
+    cb(oldValue, newValue, onInvalidate)
+    oldValue = newValue
+  }
+
+  const effectFn = effct(
+    () => getter(),
+    {
+      lazy: true,
+      scheduler: () => {
+        if (options.flush === 'post') {
+          const p = Promise.resolve()
+          p.then(job)
+        } else job()
+      }
+    }
+  )
+
+  if (options.immediate) job()
+  else oldValue = effectFn()
+}
+
+function traverse (value, seen = new Set()) {
+  if (typeof value !== 'object' || value === null || seen.has(value)) return
+  seen.add(value)
+  for (const k in value) traverse(value[k], seen)
+  return value
 }
