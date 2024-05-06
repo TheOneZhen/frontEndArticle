@@ -53,7 +53,16 @@ V8首先使用解释器将**源代码**转变成**抽象语法树**，通过JIT�
 V8管理分为俩部分：
 
 - 内存分配
+    - 堆内存
 
-    
+        V8使用堆来管理JavaScript使用的数据，以及生成的代码、哈希表等。
+
+    - Zone Memory
+
+        > 原文中介绍的是抽象Zone类，v8中为[Zone Memory](https://v8.dev/blog/optimizing-v8-memory#zone-memory-reduction)
+
+        Zone Memory主要供内部虚拟机操作（Internal VM operations）使用，特点是每次申请都是一整块的（小）内存（Chunk），用完就全部释放，避免了对细微内存的管理。缺点是内存利用率低，如果存在程序长时间占用内存，会导致内存不足。
 
 - 垃圾回收机制
+
+    
