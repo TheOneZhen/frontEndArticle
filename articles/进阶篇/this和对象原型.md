@@ -87,23 +87,23 @@
 
 4. new绑定
     
-    new运算符更像是一个语法糖，表示接下来的一个函数会进行**构造函数调用**（区别于普通函数调用）：
+    new运算符更像是一个语法糖，表示接下来的一个函数会进行**构造函数调用**（区别于普通函数调用），简单实现（[MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new#%E6%8F%8F%E8%BF%B0)）：
     
         ```js
         function newCall (fn, ...args) {
-          // 1. 创建一个**空的**js新对象
-          const instance1 = Object.create(null)
+          // 1. 创建一个空的js新对象（不需要使用Object.create(null)）
+          const instance1 = {}
           // 2. 将步骤1新创建的对象链接至构造函数的原型
-          Object.setPrototypeOf(instance1, fn.prototype)
-          /**
-           * 1、2俩步其实就是做这件事
-           * `const instance1 = Object.create(fn.prototype)`
-           */
+          if (isObject(fn.prototype)) Object.setPrototypeOf(instance1, fn.prototype)
           // 3. 调用传入函数，如果函数创建了新对象，则返回新对象（注意调用fn的上下文是instance1而不是newCall所在的上下文，这点如果困惑可以从实例化对象的角度理解）
           const instance2 = fn.apply(instance1, args)
-          if (typeof instance2 === 'object' && instance2 !== null) return instance2
-          // 4. 否则返回开始创建的实例
-          return instance1
+          // 4. 如果生成的实例是对象，返回，如果不是返回最开始创建的对象
+          return isObject(instance2) ? instance2 : instance1
+        }
+
+        function isObject (value) {
+          const type = typeof value
+          return value !== null && (type === 'object' || type === 'function')
         }
         ```
 
