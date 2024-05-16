@@ -1,10 +1,8 @@
-# 什么是chunk
-
-# 通过路由chunk不同包
-
-# 与webpack chunk区别
-
-## vite版本升级
-### vite3对vite2的改进
-1. 支持原生ES Module，原生ESM dynamic import和import.meta
-### vite4对vite3的改进
+# 额外内容
+1. ESbuild
+2. ES Module / CommonJS / UMD
+3. HTTP缓存
+4. import.meta
+5. glob 匹配模式(https://github.com/mrmlnc/fast-glob)
+6. WebAssembly(https://developer.mozilla.org/en-US/docs/WebAssembly/JavaScript_interface/Instance)
+7. Rollup
