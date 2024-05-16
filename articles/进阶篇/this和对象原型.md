@@ -345,7 +345,7 @@ class B extends A {
     console.log('run here B: ', new.target.name) // run here B: B
   }
   log () {
-    // 非构造函数，new.target无效
+    // 非构造函数调用，new.target无效。通过`new B.log()`的方式进行构造函数调用时，有效
     console.log('new.target is invaild: ', new.target) // new.target is invaild: undefined
   }
 }
