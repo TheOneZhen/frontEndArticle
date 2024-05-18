@@ -5,23 +5,23 @@
 /**
  * 手写`new`操作符
  * MDN：https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new#%E6%8F%8F%E8%BF%B0
- * @param {Function} fn 
+ * @param {Function} fn
  * @returns Object
  */
-function newOp (fn, ...args) {
+function newOp(fn, ...args) {
   // 创建一个空对象
-  const instance1 = {}
+  const instance1 = {};
   // 如果构造函数prototype存在，将instance1的原型指向它
-  if (isObject(fn.prototype)) Object.setPrototypeOf(instance1, fn.prototype)
+  if (isObject(fn.prototype)) Object.setPrototypeOf(instance1, fn.prototype);
   // 以instance1为上下文执行构造函数
-  const instance2 = fn.apply(instance1, args)
+  const instance2 = fn.apply(instance1, args);
   // 如果生成的实例是对象，返回，如果不是返回最开始创建的对象
-  return isObject(instance2) ? instance2 : instance1
+  return isObject(instance2) ? instance2 : instance1;
 }
 
-function isObject (value) {
-  const type = typeof value
-  return value !== null && (type === 'object' || type === 'function')
+function isObject(value) {
+  const type = typeof value;
+  return value !== null && (type === "object" || type === "function");
 }
 /**
  * 扩展
@@ -36,6 +36,34 @@ function isObject (value) {
  */
 
 /**
+ * call + bind + apply
+ */
+
+/**
  * Promise A+
  */
 
+/**
+ * 防抖 + 节流
+ */
+
+/**
+ * 深拷贝，会对任何一种类型进行拷贝并任务分离
+ */
+
+function cloneDeep(value) {
+  // 如果是原始值，直接返回
+  // 原始值包括null/undefined/Number/String/BigInt/Symbol/
+  if (!isObject(value)) return value
+}
+/** common function */
+function getTag(value) {
+  return String.prototype.toString.call(value);
+}
+/** common function */
+function isMap(value) {
+  return isObjectLike(value) && getTag(value) === "[object Map]";
+}
+function isArray(value) {
+  return Array.isArray(value);
+}
