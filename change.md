@@ -1,1 +1,1 @@
-更新文章[this和对象原型](https://zhenisbusy.space/blog/article/this和对象原型)中`new`操作符简单实现存在的错误。不需要通过`Object.create(null)`创建一个完全空的对象，因为新的实例需要使用一个原型参与构造。
+发布文章[《WebKit技术内幕》9-11章摘要及补充](https://zhenisbusy.space/blog/article/《WebKit技术内幕》9-11章摘要及补充)
