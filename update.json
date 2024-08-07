@@ -1,7 +1,7 @@
 {
   "articles": [
     {
-      "type": "add",
+      "type": "update",
       "title": "前端监控",
       "data": {}
     }
