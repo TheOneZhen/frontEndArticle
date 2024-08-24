@@ -20,7 +20,7 @@ const username: string = 'zhen'
 console.log(username)
 ```
 
-对于上述文件，可在同级执行：
+对于上述文件，在同级执行：
 
 ```bash
 tsc test.ts
@@ -37,8 +37,27 @@ console.log(username);
 ## 流程
 
 ```mermaid
-graph LR;
-源码 --> 扫描器 --> Token流
+flowchart LR;
+    ts源码 --> Scanner[Scanner（扫描器）] --> Token --> Parser[Parser（解析器）] --> AST --> Binder --> Symbols;
+    
+    subgraph 代码编译;
+        Emitter[Emitter（发射器）];
+        Checker2[Checker（检查器）];
+        js[js代码];
+    end;
+
+    subgraph 类型检查;
+        Checker1[Checker（检查器）];
+        linting[linting（类型检查）];
+        Symbols[Symbols（符号）];
+        Binder[Binder（绑定器）];
+    end;
+
+    AST --> Checker1 --> linting;
+    Symbols --> Checker1;
+    AST --> Emitter --> js;
+    Checker2 --> Emitter;
+
 ```
 
 ## 原理
